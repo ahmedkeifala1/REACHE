@@ -1,0 +1,64 @@
+{% load static %}
+<header class="site-header" id="siteHeader">
+  <div class="header-inner">
+    <a class="brand" href="{% url 'core:home' %}">
+      <img
+        src="{% static 'img/logo.jpeg' %}"
+        alt="{{ site.organisation_name }}"
+      />
+    </a>
+
+    <button
+      class="nav-toggle"
+      id="navToggle"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+    >
+      <span></span><span></span><span></span>
+    </button>
+
+    <nav class="main-nav" id="mainNav">
+      <ul class="nav-list">
+        {% for item in main_menu %} {% if not item.is_button %}
+        <li class="{% if item.children.all %}has-children{% endif %}">
+          <a href="{{ item.url }}">{{ item.title }}</a>
+          {% if item.children.all %}
+          <ul class="sub-menu">
+            {% for child in item.children.all %}
+            <li><a href="{{ child.url }}">{{ child.title }}</a></li>
+            {% endfor %}
+          </ul>
+          {% endif %}
+        </li>
+        {% endif %} {% endfor %}
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      <button class="search-toggle" id="searchToggle" aria-label="Search">
+        <span class="search-toggle__label">Search</span>
+        <svg viewBox="0 0 24 24">
+          <path
+            d="M15.5 14h-.79l-.28-.27A6.47 6.47 0 0 0 16 9.5 6.5 6.5 0 1 0 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"
+          />
+        </svg>
+      </button>
+      {% for item in main_menu %} {% if item.is_button %}
+      <a class="nav-donate" href="{{ item.url }}">{{ item.title }}</a>
+      {% endif %} {% endfor %}
+    </div>
+  </div>
+
+  <div class="search-bar" id="searchBar">
+    <form action="{% url 'core:search' %}" method="get" role="search">
+      <input
+        type="search"
+        name="q"
+        placeholder="Search the site&hellip;"
+        aria-label="Search"
+        value="{{ query|default:'' }}"
+      />
+      <button class="btn btn--primary" type="submit">Search</button>
+    </form>
+  </div>
+</header>

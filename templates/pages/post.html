@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% block title %}{{ post.title }} | {{ site.organisation_name }}{% endblock %}
+{% block meta_description %}{{ post.excerpt|striptags|truncatewords:28 }}{% endblock %}
+
+{% block content %}
+  {% include "partials/page_hero.html" with hero_title=post.title hero_eyebrow=post.category.name hero_image=post.image_url crumbs="Newsroom" %}
+
+  <section class="section">
+    <div class="container">
+      <div class="prose">
+        <p class="post-meta">{{ post.published|date:"F j, Y" }}</p>
+        {% if post.excerpt %}<p class="lead">{{ post.excerpt }}</p>{% endif %}
+        {{ post.body|safe }}
+        <p style="margin-top:40px;"><a class="link-arrow" href="{% url 'core:newsroom' %}">Back to the Newsroom</a></p>
+      </div>
+    </div>
+  </section>
+
+  {% if related %}
+  <section class="section section--cream">
+    <div class="container">
+      <div class="section-head"><h2>Related Stories</h2></div>
+      <div class="post-grid">
+        {% for other in related %}
+          <article class="post-card">
+            <div class="post-card__media" {% if other.image %}style="background-image:url('{{ other.image.url }}');"{% endif %}></div>
+            <div class="post-card__body">
+              <div class="post-meta">{{ other.published|date:"F j, Y" }}</div>
+              <h3><a href="{{ other.get_absolute_url }}">{{ other.title }}</a></h3>
+              <a class="link-arrow" href="{{ other.get_absolute_url }}">Read More</a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+{% block title %}What We Do | {{ site.organisation_name }}{% endblock %}
+
+{% block content %}
+  {% include "partials/page_hero.html" with hero_title=page_title hero_eyebrow="Our Work" hero_text=page_intro crumbs="What We Do" %}
+
+  <section class="section section--cream">
+    <div class="container">
+      <div class="pillar-grid">
+        {% for area in focus_areas %}
+          <article class="pillar">
+            <div class="pillar__icon">{% include "partials/icon.html" with icon=area.icon %}</div>
+            <h3>{{ area.title }}</h3>
+            <p>{{ area.summary }}</p>
+            <a class="link-arrow" href="{{ area.get_absolute_url }}">Learn More</a>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {% include "partials/newsletter.html" %}
+{% endblock %}

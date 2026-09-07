@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+{% block title %}Newsroom | {{ site.organisation_name }}{% endblock %}
+
+{% block content %}
+  {% include "partials/page_hero.html" with hero_title="Newsroom & Blog" hero_eyebrow="Our Impact" hero_text="Press, field stories and updates from across our programmes." crumbs="Our Impact" %}
+
+  <section class="section">
+    <div class="container">
+      <div class="filter-bar">
+        <a class="chip {% if not active_category %}is-active{% endif %}" href="{% url 'core:newsroom' %}">All</a>
+        {% for category in categories %}
+          <a class="chip {% if active_category == category.slug %}is-active{% endif %}"
+             href="?category={{ category.slug }}">{{ category.name }}</a>
+        {% endfor %}
+        <form action="" method="get" style="margin-left:auto;display:flex;gap:8px;">
+          <input class="chip" style="min-width:200px;" type="search" name="q" value="{{ query }}" placeholder="Search posts">
+          <button class="btn btn--green" style="padding:8px 20px;" type="submit">Go</button>
+        </form>
+      </div>
+
+      {% if page_obj %}
+        <div class="post-grid">
+          {% for post in page_obj %}
+            <article class="post-card">
+              <div class="post-card__media" {% if post.image %}style="background-image:url('{{ post.image.url }}');"{% endif %}></div>
+              <div class="post-card__body">
+                <div class="post-meta">
+                  {% if post.category %}{{ post.category.name }} &middot; {% endif %}{{ post.published|date:"F j, Y" }}
+                </div>
+                <h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+                <p>{{ post.excerpt|truncatewords:24 }}</p>
+                <a class="link-arrow" href="{{ post.get_absolute_url }}">Read More</a>
+              </div>
+            </article>
+          {% endfor %}
+        </div>
+
+        {% if page_obj.has_other_pages %}
+          <div class="pagination">
+            {% if page_obj.has_previous %}
+              <a href="?page={{ page_obj.previous_page_number }}{% if active_category %}&category={{ active_category }}{% endif %}{% if query %}&q={{ query }}{% endif %}">Previous</a>
+            {% endif %}
+            <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            {% if page_obj.has_next %}
+              <a href="?page={{ page_obj.next_page_number }}{% if active_category %}&category={{ active_category }}{% endif %}{% if query %}&q={{ query }}{% endif %}">Next</a>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% else %}
+        <p>No posts found.</p>
+      {% endif %}
+    </div>
+  </section>
+
+  {% include "partials/newsletter.html" %}
+{% endblock %}

@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1600 900" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Abstract landscape">
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#157a47"/>
+      <stop offset="100%" stop-color="#0b5d34"/>
+    </linearGradient>
+    <linearGradient id="hillA" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#dcccb1"/>
+      <stop offset="100%" stop-color="#958d55"/>
+    </linearGradient>
+    <linearGradient id="hillB" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#82c0c7"/>
+      <stop offset="100%" stop-color="#6d8c9d"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1600" height="900" fill="url(#sky)"/>
+  <circle cx="1230" cy="205" r="105" fill="#f0ebdd" opacity="0.5"/>
+
+  <path d="M0 640 C 240 520, 420 660, 640 590 S 1040 470, 1280 560 1600 620 1600 620 L1600 900 L0 900 Z"
+        fill="url(#hillB)" opacity="0.55"/>
+  <path d="M0 730 C 260 640, 500 780, 760 700 S 1180 610, 1600 700 L1600 900 L0 900 Z"
+        fill="url(#hillA)" opacity="0.72"/>
+  <path d="M0 820 C 300 770, 620 860, 900 810 S 1350 760, 1600 800 L1600 900 L0 900 Z"
+        fill="#084526" opacity="0.85"/>
+
+  <g fill="#084526" opacity="0.75">
+    <path d="M300 812 c0-34 22-58 46-58 s46 24 46 58z"/>
+    <rect x="330" y="795" width="32" height="24"/>
+    <path d="M470 815 c0-28 18-48 38-48 s38 20 38 48z"/>
+    <rect x="494" y="800" width="26" height="20"/>
+    <path d="M1120 806 c0-32 21-55 44-55 s44 23 44 55z"/>
+    <rect x="1148" y="790" width="30" height="22"/>
+  </g>
+</svg>

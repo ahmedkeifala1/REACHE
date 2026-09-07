@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Meet Our Team | {{ site.organisation_name }}{% endblock %}
+
+{% block content %}
+  {% include "partials/page_hero.html" with hero_title="Meet Our Team" hero_eyebrow="Who We Are" hero_text="The people designing, delivering and sustaining last-mile health care." crumbs="Who We Are" %}
+
+  <section class="section">
+    <div class="container">
+      {% if leadership %}
+        <div class="section-head"><h2>Leadership</h2></div>
+        <div class="team-grid">
+          {% for member in leadership %}
+            <div class="team-card">
+              <div class="team-card__photo" {% if member.photo %}style="background-image:url('{{ member.photo.url }}');"{% endif %}>
+                {% if not member.photo %}{{ member.name|slice:":1" }}{% endif %}
+              </div>
+              <h3>{{ member.name }}</h3>
+              <p class="role">{{ member.role }}</p>
+              {% if member.bio %}<p>{{ member.bio|truncatewords:26 }}</p>{% endif %}
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      {% if staff %}
+        <div class="section-head" style="margin-top:70px;"><h2>Programme Team</h2></div>
+        <div class="team-grid">
+          {% for member in staff %}
+            <div class="team-card">
+              <div class="team-card__photo" {% if member.photo %}style="background-image:url('{{ member.photo.url }}');"{% endif %}>
+                {% if not member.photo %}{{ member.name|slice:":1" }}{% endif %}
+              </div>
+              <h3>{{ member.name }}</h3>
+              <p class="role">{{ member.role }}</p>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+    </div>
+  </section>
+{% endblock %}

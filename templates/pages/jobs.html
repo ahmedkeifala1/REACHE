@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}Work for Us | {{ site.organisation_name }}{% endblock %}
+
+{% block content %}
+  {% include "partials/page_hero.html" with hero_title="Work for Us" hero_eyebrow="Get Involved" hero_text="Join a team that builds health systems people can rely on." crumbs="Get Involved" %}
+
+  <section class="section">
+    <div class="container">
+      <ul class="job-list">
+        {% for job in jobs %}
+          <li class="job-item">
+            <h3>{{ job.title }}</h3>
+            <div class="job-meta">
+              {{ job.location }} &middot; {{ job.employment_type }}
+              {% if job.closing_date %} &middot; Closes {{ job.closing_date|date:"j F Y" }}{% endif %}
+            </div>
+            {% if job.description %}<p>{{ job.description|truncatewords:45 }}</p>{% endif %}
+            <a class="link-arrow" href="{% url 'core:contact' %}">Apply</a>
+          </li>
+        {% empty %}
+          <p>There are no open positions right now. Check back soon, or
+             <a href="{% url 'core:contact' %}">send us an expression of interest</a>.</p>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+{% endblock %}

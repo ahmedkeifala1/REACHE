@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}Ways to Give | {{ site.organisation_name }}{% endblock %}
+
+{% block content %}
+  {% include "partials/page_hero.html" with hero_title="Ways to Give" hero_eyebrow="Get Involved" hero_text="Your contribution helps increase the availability of health care for the most under-reached communities." crumbs="Get Involved" %}
+
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2>Choose Your Gift</h2>
+        <p>Every gift goes towards closing the distance between a health product and the person who needs it.</p>
+      </div>
+
+      <div class="donate-grid">
+        <div class="donate-card">
+          <div class="amount">$25</div>
+          <p>Supplies a community health worker with a month of essential consumables.</p>
+          <a class="btn btn--outline" href="{% url 'core:contact' %}">Give $25</a>
+        </div>
+        <div class="donate-card">
+          <div class="amount">$100</div>
+          <p>Funds cold-chain maintenance that keeps vaccines viable at a rural facility.</p>
+          <a class="btn btn--outline" href="{% url 'core:contact' %}">Give $100</a>
+        </div>
+        <div class="donate-card">
+          <div class="amount">$500</div>
+          <p>Underwrites a full last-mile delivery run to facilities beyond the road network.</p>
+          <a class="btn btn--outline" href="{% url 'core:contact' %}">Give $500</a>
+        </div>
+        <div class="donate-card">
+          <div class="amount">Monthly</div>
+          <p>Recurring support lets us plan further ahead and respond faster when outbreaks hit.</p>
+          <a class="btn btn--primary" href="{% url 'core:contact' %}">Give Monthly</a>
+        </div>
+      </div>
+
+      <div class="prose">
+        <h2>Other Ways to Support</h2>
+        <ul>
+          <li><strong>Institutional partnership</strong> &mdash; co-design and co-fund programmes with our country teams.</li>
+          <li><strong>In-kind support</strong> &mdash; equipment, cold-chain assets and logistics capacity.</li>
+          <li><strong>Technical collaboration</strong> &mdash; contribute research, data or systems expertise.</li>
+        </ul>
+        <p>To discuss any of these, please <a href="{% url 'core:contact' %}">contact our team</a>.</p>
+      </div>
+    </div>
+  </section>
+
+  {% if stats %}
+  <section class="section stats">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow" style="color:var(--sand-deep);">Your Impact</p>
+        <h2>What Your Support Makes Possible</h2>
+      </div>
+      <div class="stats__grid">
+        {% for stat in stats %}
+          <div class="stat">
+            <div class="stat__value">{{ stat.value }}</div>
+            <p class="stat__label">{{ stat.label }}</p>
+          </div>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+{% endblock %}

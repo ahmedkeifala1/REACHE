@@ -1,0 +1,20 @@
+<section class="newsletter">
+  <div class="container">
+    <div class="newsletter__inner">
+      <div>
+        <p class="eyebrow">Stay Informed</p>
+        <h2>Get Our Newsletter</h2>
+        <p>All of the latest news from {{ site.organisation_name }}, direct to your mailbox.</p>
+      </div>
+      <div>
+        <form action="{% url 'core:newsletter' %}" method="post">
+          {% csrf_token %}
+          <input type="hidden" name="next" value="{{ request.path }}">
+          <input type="email" name="email" placeholder="Your email address" required>
+          <button class="btn btn--primary" type="submit">Sign Up</button>
+          <small>By providing your email address you agree to receive periodic email news from {{ site.organisation_name }}.</small>
+        </form>
+      </div>
+    </div>
+  </div>
+</section>

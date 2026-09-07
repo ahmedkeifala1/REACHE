@@ -1,0 +1,45 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# Django
+db.sqlite3
+db.sqlite3-journal
+staticfiles/
+media/
+*.log
+
+# Third-party placeholder photography. These are VillageReach's copyrighted
+# photographs of identifiable people and REACHE has no licence to publish them,
+# so they are deliberately kept out of this public repository. They still exist
+# in the working copy and are uploaded straight to the protected preview
+# deployment by the Vercel CLI. See core/seed_assets/CREDITS.md.
+core/seed_assets/
+
+# REACHE's internal organisation chart. It is a reference document for the
+# information architecture (see core/models.py), never rendered by any template,
+# so there is no reason to publish the staff structure in a public repository.
+# Delete these two lines if you want it tracked.
+organogram.jpeg
+static/img/organogram.jpeg
+
+# Vercel
+.vercel/
+
+# Tooling
+.mypy_cache/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Editors / OS
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Local secrets
+.env

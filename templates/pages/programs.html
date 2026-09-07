@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Our Programs | {{ site.organisation_name }}{% endblock %}
+
+{% block content %}
+  {% include "partials/page_hero.html" with hero_title="Our Programs" hero_eyebrow="Our Programs" hero_text="Programmes that carry care across the whole of life, from a healthy pregnancy to a resilient community." crumbs="Our Programs" %}
+
+  <section class="section">
+    <div class="container">
+      <div class="post-grid">
+        {% for program in programs %}
+          <article class="post-card">
+            <div class="post-card__media" {% if program.image %}style="background-image:url('{{ program.image.url }}');"{% endif %}></div>
+            <div class="post-card__body">
+              <h3><a href="{{ program.get_absolute_url }}">{{ program.title }}</a></h3>
+              <p>{{ program.summary|truncatewords:26 }}</p>
+              <a class="link-arrow" href="{{ program.get_absolute_url }}">Learn More</a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {% include "partials/newsletter.html" %}
+{% endblock %}

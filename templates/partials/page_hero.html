@@ -1,0 +1,13 @@
+{% comment %}Shared inner-page hero. Expects: hero_title, optional hero_eyebrow / hero_text / hero_image / crumbs.{% endcomment %}
+<section class="page-hero">
+  {% if hero_image %}<div class="page-hero__bg" style="background-image:url('{{ hero_image }}');"></div>{% endif %}
+  <div class="container page-hero__inner">
+    <div class="breadcrumbs">
+      <a href="{% url 'core:home' %}">Home</a>
+      {% if crumbs %} &rsaquo; {{ crumbs }}{% endif %}
+    </div>
+    {% if hero_eyebrow %}<p class="eyebrow">{{ hero_eyebrow }}</p>{% endif %}
+    <h1>{{ hero_title }}</h1>
+    {% if hero_text %}<p>{{ hero_text }}</p>{% endif %}
+  </div>
+</section>

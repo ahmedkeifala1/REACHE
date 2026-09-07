@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Resources | {{ site.organisation_name }}{% endblock %}
+
+{% block content %}
+  {% include "partials/page_hero.html" with hero_title="Resources" hero_eyebrow="Our Impact" hero_text="Reports, evidence briefs and tools from our programmes and research." crumbs="Our Impact" %}
+
+  <section class="section">
+    <div class="container">
+      <ul class="resource-list">
+        {% for resource in resources %}
+          <li class="resource-item">
+            <div class="post-meta">{{ resource.resource_type }} &middot; {{ resource.published|date:"F Y" }}</div>
+            <h3>{{ resource.title }}</h3>
+            {% if resource.description %}<p>{{ resource.description }}</p>{% endif %}
+            <a class="link-arrow" href="{{ resource.link }}">Open Resource</a>
+          </li>
+        {% empty %}
+          <p>Resources will be published here soon.</p>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+
+  {% include "partials/newsletter.html" %}
+{% endblock %}

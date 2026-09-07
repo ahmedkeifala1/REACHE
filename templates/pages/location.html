@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% block title %}{{ location.name }} | {{ site.organisation_name }}{% endblock %}
+
+{% block content %}
+  {% include "partials/page_hero.html" with hero_title=location.name hero_eyebrow="Where We Work" hero_text=location.summary hero_image=location.image_url crumbs="Where We Work" %}
+
+  <section class="section">
+    <div class="container">
+      <div class="prose">
+        {% if location.body %}{{ location.body|safe }}{% else %}<p>{{ location.summary }}</p>{% endif %}
+      </div>
+    </div>
+  </section>
+
+  {% if posts %}
+  <section class="section section--cream">
+    <div class="container">
+      <div class="section-head"><h2>Latest Stories</h2></div>
+      <div class="post-grid">
+        {% for post in posts %}
+          <article class="post-card">
+            <div class="post-card__media" {% if post.image %}style="background-image:url('{{ post.image.url }}');"{% endif %}></div>
+            <div class="post-card__body">
+              <div class="post-meta">{{ post.published|date:"F j, Y" }}</div>
+              <h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+              <a class="link-arrow" href="{{ post.get_absolute_url }}">Read More</a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+  {% endif %}
+{% endblock %}

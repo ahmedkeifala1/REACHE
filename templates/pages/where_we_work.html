@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% block title %}Where We Work | {{ site.organisation_name }}{% endblock %}
+
+{% block content %}
+  {% include "partials/page_hero.html" with hero_title="Locally Driven. Globally Connected." hero_eyebrow="Where We Work" hero_text="Our experts live and work where the work happens, combining deep local knowledge with global perspective." crumbs="Where We Work" %}
+
+  <section class="section">
+    <div class="container">
+      <div class="location-grid">
+        {% for location in locations %}
+          <a class="location-card" href="{{ location.get_absolute_url }}">
+            <div class="location-card__bg" {% if location.image %}style="background-image:url('{{ location.image.url }}');"{% endif %}></div>
+            <div class="location-card__body">
+              <h3>{{ location.name }}</h3>
+              <p>{{ location.summary|truncatewords:18 }}</p>
+              <span class="link-arrow">Explore</span>
+            </div>
+          </a>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {% include "partials/newsletter.html" %}
+{% endblock %}

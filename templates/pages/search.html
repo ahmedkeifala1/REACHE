@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Search | {{ site.organisation_name }}{% endblock %}
+
+{% block content %}
+  {% include "partials/page_hero.html" with hero_title="Search" hero_eyebrow="Site Search" crumbs="Search" %}
+
+  <section class="section">
+    <div class="container">
+      <form action="{% url 'core:search' %}" method="get" style="display:flex;gap:12px;margin-bottom:40px;max-width:620px;">
+        <input class="chip" style="flex:1;padding:13px 18px;" type="search" name="q" value="{{ query }}" placeholder="Search the site">
+        <button class="btn btn--green" type="submit">Search</button>
+      </form>
+
+      {% if query %}
+        <p class="post-meta">{{ total }} result{{ total|pluralize }} for &ldquo;{{ query }}&rdquo;</p>
+
+        {% if results.posts %}
+          <h2>News &amp; Stories</h2>
+          <ul class="resource-list">
+            {% for item in results.posts %}
+              <li class="resource-item">
+                <h3><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h3>
+                <p>{{ item.excerpt|truncatewords:24 }}</p>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        {% if results.programs %}
+          <h2>Programs</h2>
+          <ul class="resource-list">
+            {% for item in results.programs %}
+              <li class="resource-item">
+                <h3><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h3>
+                <p>{{ item.summary|truncatewords:24 }}</p>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        {% if results.pages %}
+          <h2>Pages</h2>
+          <ul class="resource-list">
+            {% for item in results.pages %}
+              <li class="resource-item">
+                <h3><a href="{{ item.get_absolute_url }}">{{ item.title }}</a></h3>
+                <p>{{ item.intro|truncatewords:24 }}</p>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        {% if results.locations %}
+          <h2>Locations</h2>
+          <ul class="resource-list">
+            {% for item in results.locations %}
+              <li class="resource-item">
+                <h3><a href="{{ item.get_absolute_url }}">{{ item.name }}</a></h3>
+              </li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+
+        {% if not total %}
+          <p>No results found. Try a different term, or browse the
+             <a href="{% url 'core:newsroom' %}">newsroom</a>.</p>
+        {% endif %}
+      {% endif %}
+    </div>
+  </section>
+{% endblock %}

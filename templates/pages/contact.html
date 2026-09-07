@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+{% block title %}Contact Us | {{ site.organisation_name }}{% endblock %}
+
+{% block content %}
+  {% include "partials/page_hero.html" with hero_title="Contact Us" hero_eyebrow="Get Involved" hero_text="Questions, partnership ideas or media enquiries: we would like to hear from you." crumbs="Get Involved" %}
+
+  <section class="section">
+    <div class="container">
+      <div class="split">
+        <div>
+          <h2>Send Us a Message</h2>
+          <form class="form-grid" method="post" action="{% url 'core:contact' %}">
+            {% csrf_token %}
+            <div class="form-row">
+              <div class="form-field">
+                <label for="name">Your name</label>
+                <input type="text" id="name" name="name" required>
+              </div>
+              <div class="form-field">
+                <label for="email">Email address</label>
+                <input type="email" id="email" name="email" required>
+              </div>
+            </div>
+            <div class="form-field">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" name="subject">
+            </div>
+            <div class="form-field">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" required></textarea>
+            </div>
+            <div>
+              <button class="btn btn--primary" type="submit">Send Message</button>
+            </div>
+          </form>
+        </div>
+
+        <div>
+          <h2>Reach Us Directly</h2>
+          <ul class="info-list">
+            <li><strong>Email</strong><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
+            {% if site.phone %}<li><strong>Phone</strong>{{ site.phone }}</li>{% endif %}
+            {% if site.address %}<li><strong>Office</strong>{{ site.address }}</li>{% endif %}
+            <li><strong>Media Enquiries</strong><a href="mailto:{{ site.email }}">{{ site.email }}</a></li>
+          </ul>
+          <p style="margin-top:24px;">For job applications, please include the role title in your subject line.
+             Open roles are listed on <a href="{% url 'core:work_for_us' %}">Work for Us</a>.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+{% endblock %}

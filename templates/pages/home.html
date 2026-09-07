@@ -1,0 +1,267 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ site.organisation_name }} | {{ site.tagline }}{% endblock %}
+{% block meta_description %}{{ site.hero_body }}{% endblock %}
+
+{% block content %}
+
+{# ------------------------------------------------------------------ hero #}
+{# Full-bleed photograph with a solid brand wedge cut across it on a         #}
+{# diagonal, the headline running from the wedge out over the photo. The     #}
+{# closing word is set much larger and heavier than the lines above it.      #}
+<section class="hero">
+  <div class="hero__bg" style="background-image:url('{% if site.hero_image_url %}{{ site.hero_image_url }}{% else %}{% static 'img/hero.svg' %}{% endif %}');"></div>
+  <div class="hero__scrim" aria-hidden="true"></div>
+  <div class="hero__wedge" aria-hidden="true"></div>
+
+  <div class="container hero__inner">
+    <h1 class="hero__title">
+      <span class="hero__line">{{ site.hero_prefix }}</span>
+      <span class="hero__line">{{ site.hero_headline }}</span>
+      <span class="hero__rotator" id="heroRotator" data-words="{{ site.hero_rotating_words }}">{{ site.rotating_words.0 }}</span>
+    </h1>
+  </div>
+</section>
+
+{# --------------------------------------------------- lead feature overlap #}
+{# The first featured post straddles the bottom edge of the hero: image on   #}
+{# the left with an angled inner edge, copy on the right.                    #}
+<section class="feature-band">
+  <div class="container">
+    {% with lead=featured_posts.0 %}
+      {% if lead %}
+        <article class="lead-feature">
+          <a class="lead-feature__media"
+             href="{{ lead.get_absolute_url }}"
+             {% if lead.image %}style="background-image:url('{{ lead.image.url }}');"{% endif %}
+             aria-label="{{ lead.title }}"></a>
+          <div class="lead-feature__body">
+            <span class="lead-feature__rule" aria-hidden="true"></span>
+            <div class="lead-feature__text">
+              <h2 class="lead-feature__title">{{ lead.title }}</h2>
+              {% if lead.featured_kicker %}
+                <p class="lead-feature__sub">{{ lead.featured_kicker }}</p>
+              {% endif %}
+              <p>{{ lead.excerpt|truncatewords:34 }}</p>
+              <a class="link-arrow" href="{{ lead.get_absolute_url }}">Read More</a>
+            </div>
+          </div>
+        </article>
+      {% else %}
+        <article class="lead-feature lead-feature--plain">
+          <div class="lead-feature__body">
+            <span class="lead-feature__rule" aria-hidden="true"></span>
+            <div class="lead-feature__text">
+              <h2 class="lead-feature__title">{{ site.organisation_name }}</h2>
+              <p class="lead-feature__sub">{{ site.tagline }}</p>
+              <p>{{ site.hero_body }}</p>
+              <a class="link-arrow" href="{% url 'core:what_we_do' %}">Learn What We Do</a>
+            </div>
+          </div>
+        </article>
+      {% endif %}
+    {% endwith %}
+  </div>
+</section>
+
+{# ------------------------------------------------ remaining featured cards #}
+{% with rest=featured_posts|slice:"1:5" %}
+{% if rest %}
+<section class="featured-strip">
+  <div class="container">
+    <div class="featured-grid">
+      {% for post in rest %}
+        <article class="featured-card">
+          <div class="featured-card__media" {% if post.image %}style="background-image:url('{{ post.image.url }}');"{% endif %}></div>
+          <div class="featured-card__body">
+            {% if post.featured_kicker %}<div class="featured-card__kicker">{{ post.featured_kicker }}</div>{% endif %}
+            <h3>{{ post.title }}</h3>
+            <p>{{ post.excerpt|truncatewords:20 }}</p>
+            <a class="link-arrow" href="{{ post.get_absolute_url }}">Read More</a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endwith %}
+
+{# ------------------------------------------------------- what we do / pillars #}
+<section class="section section--cream">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">What We Do</p>
+      <h2>Responsive Primary Health Care to Achieve Universal Health Coverage</h2>
+      <p>We focus on designing responsive primary health care systems that improve the accessibility of
+         health products and services for the hardest-to-reach communities. Through radical collaboration
+         with government, partners, communities and the private sector, we build systems that last.</p>
+    </div>
+
+    <div class="pillar-grid">
+      {% for area in focus_areas %}
+        <article class="pillar">
+          <div class="pillar__icon">{% include "partials/icon.html" with icon=area.icon %}</div>
+          <h3>{{ area.title }}</h3>
+          <p>{{ area.summary|truncatewords:26 }}</p>
+          <a class="link-arrow" href="{{ area.get_absolute_url }}">Learn More</a>
+        </article>
+      {% endfor %}
+    </div>
+
+    <div class="section-cta">
+      <a class="btn btn--green" href="{% url 'core:what_we_do' %}">Learn More About What We Do</a>
+    </div>
+  </div>
+</section>
+
+{# --------------------------------------------------------------- newsletter #}
+{% include "partials/newsletter.html" %}
+
+{# --------------------------------------------------------------- stat band #}
+{% if stats %}
+<section class="section stats stats--angled">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow" style="color:var(--sand-deep);">Our Impact</p>
+      <h2>Health Care Needed to Thrive</h2>
+      <p>Designing responsive supply chains guarantees that life-saving products reach health centres and
+         community health workers despite shocks and stresses. We use technology and innovation to create
+         new pathways to care.</p>
+    </div>
+    <div class="stats__grid">
+      {% for stat in stats %}
+        <div class="stat">
+          <div class="stat__value">{{ stat.value }}</div>
+          <p class="stat__label">{{ stat.label }}</p>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="section-cta">
+      <a class="btn btn--ghost" href="/our-impact/history/">Learn More About Our Impact</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ------------------------------------------------------------ where we work #}
+<section class="section">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Where We Work</p>
+      <h2>Locally Driven. Globally Connected.</h2>
+      <p>The heart of {{ site.organisation_name }}'s mission lies in the communities we serve. Our experts
+         live and work where the work happens, combining deep local knowledge with global perspective.</p>
+    </div>
+    <div class="location-grid">
+      {% for location in locations %}
+        <a class="location-card" href="{{ location.get_absolute_url }}">
+          <div class="location-card__bg" {% if location.image %}style="background-image:url('{{ location.image.url }}');"{% endif %}></div>
+          <div class="location-card__body">
+            <h3>{{ location.name }}</h3>
+            <p>{{ location.summary|truncatewords:14 }}</p>
+            <span class="link-arrow">Explore</span>
+          </div>
+        </a>
+      {% endfor %}
+    </div>
+    <div class="section-cta">
+      <a class="btn btn--outline" href="{% url 'core:where_we_work' %}">Learn More About Where We Work</a>
+    </div>
+  </div>
+</section>
+
+{# ------------------------------------------------------------- our programs #}
+{% if programs %}
+<section class="section section--sand">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Our Programs</p>
+      <h2>Care Across the Whole of Life</h2>
+      <p>From a healthy pregnancy to a protected childhood and a resilient community, our programmes close
+         the gap between the health system and the household.</p>
+    </div>
+    <div class="post-grid">
+      {% for program in programs %}
+        <article class="post-card">
+          <div class="post-card__media" {% if program.image %}style="background-image:url('{{ program.image.url }}');"{% endif %}></div>
+          <div class="post-card__body">
+            <h3><a href="{{ program.get_absolute_url }}">{{ program.title }}</a></h3>
+            <p>{{ program.summary|truncatewords:20 }}</p>
+            <a class="link-arrow" href="{{ program.get_absolute_url }}">Learn More</a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# ----------------------------------------------------------- founding story #}
+<section class="section story">
+  <div class="container">
+    <div class="split">
+      <div class="split__media split__media--angled">
+        {% if site.story_image_url %}
+          <img src="{{ site.story_image_url }}" alt="" loading="lazy">
+        {% else %}
+          <div class="placeholder">Founding Story</div>
+        {% endif %}
+      </div>
+      <div>
+        <p class="eyebrow">Who We Are</p>
+        <h2>Transforming Health Care <span class="accent-word">Together</span></h2>
+        <p>{{ site.organisation_name }} grew out of a simple conviction: the distance between a health
+           product and the person who needs it should never decide whether they live. What began as a
+           bridge between communities and the health system has become a model for last-mile care.</p>
+        <p>We work with the three authorities that shape health at the last mile &mdash; community,
+           government and the health system itself &mdash; so that the gains we make together outlast any
+           single programme.</p>
+        <a class="btn btn--green" href="/who-we-are/">Learn More About Who We Are</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+{# --------------------------------------------------------------- newsroom #}
+{% if posts %}
+<section class="section section--cream">
+  <div class="container">
+    <div class="section-head">
+      <p class="eyebrow">Latest</p>
+      <h2>Newsroom &amp; Blog</h2>
+    </div>
+    <div class="post-grid">
+      {% for post in posts %}
+        <article class="post-card">
+          <div class="post-card__media" {% if post.image %}style="background-image:url('{{ post.image.url }}');"{% endif %}></div>
+          <div class="post-card__body">
+            <div class="post-meta">
+              {% if post.category %}{{ post.category.name }} &middot; {% endif %}{{ post.published|date:"F j, Y" }}
+            </div>
+            <h3><a href="{{ post.get_absolute_url }}">{{ post.title }}</a></h3>
+            <p>{{ post.excerpt|truncatewords:22 }}</p>
+            <a class="link-arrow" href="{{ post.get_absolute_url }}">Read More</a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+    <div class="section-cta">
+      <a class="btn btn--green" href="{% url 'core:newsroom' %}">More Press, News &amp; Blog Posts</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{# --------------------------------------------------------------- donate CTA #}
+<section class="cta-band">
+  <div class="container">
+    <h2>Support Our Mission</h2>
+    <p>Your contribution helps increase the availability of health care for the most under-reached
+       communities.</p>
+    <a class="btn btn--ghost" href="{% url 'core:donate' %}">Donate Today</a>
+  </div>
+</section>
+
+{% endblock %}

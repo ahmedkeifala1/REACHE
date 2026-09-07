@@ -1,0 +1,41 @@
+{% load static %}<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ site.organisation_name }}{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}{{ site.tagline }}{% endblock %}">
+  <link rel="icon" href="{% static 'img/logo.jpeg' %}">
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  {% block extra_head %}{% endblock %}
+</head>
+<body>
+  {% include "partials/header.html" %}
+
+  <main>
+    {% if messages %}
+      <div class="container" style="padding-top:calc(var(--header-h) + 20px);">
+        <ul class="messages">
+          {% for message in messages %}
+            <li class="{{ message.tags }}">{{ message }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    {% endif %}
+
+    {% block content %}{% endblock %}
+  </main>
+
+  {# Fixed tab riding the right edge of the viewport, as on the reference site. #}
+  <a class="donate-rail" href="{% url 'core:donate' %}">
+    <span class="donate-rail__text">Donate</span>
+    <svg class="donate-rail__heart" viewBox="0 0 24 24" aria-hidden="true">
+      <path d="M12 21s-7.5-4.7-9.5-9A5.2 5.2 0 0 1 12 6.5 5.2 5.2 0 0 1 21.5 12c-2 4.3-9.5 9-9.5 9z"/>
+    </svg>
+  </a>
+
+  {% include "partials/footer.html" %}
+  <script src="{% static 'js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>
