@@ -1,0 +1,15 @@
+{% comment %}Extra pictures attached to a page in the admin. Expects: gallery.{% endcomment %}
+{% if gallery %}
+  <section class="section section--cream">
+    <div class="container">
+      <div class="page-gallery">
+        {% for item in gallery %}
+          <figure class="page-gallery__item">
+            <img src="{{ item.image_url }}" alt="{{ item.caption }}" loading="lazy">
+            {% if item.caption %}<figcaption>{{ item.caption }}</figcaption>{% endif %}
+          </figure>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+{% endif %}

@@ -1,8 +1,10 @@
 {% extends "base.html" %}
-{% block title %}Newsroom | {{ site.organisation_name }}{% endblock %}
+{% block title %}{{ hero.title }} | {{ site.organisation_name }}{% endblock %}
+{% block meta_description %}{% firstof hero.page.meta_description hero.text %}{% endblock %}
 
 {% block content %}
-  {% include "partials/page_hero.html" with hero_title="Newsroom & Blog" hero_eyebrow="Our Impact" hero_text="Press, field stories and updates from across our programmes." crumbs="Our Impact" %}
+  {% include "partials/page_hero.html" with hero_title=hero.title hero_eyebrow=hero.eyebrow hero_text=hero.text hero_image=hero.image crumbs=hero.crumbs %}
+  {% include "partials/section_body.html" %}
 
   <section class="section">
     <div class="container">

@@ -5,9 +5,12 @@ reusable content types drive every page, so editors work from the Django admin
 rather than from templates.
 """
 
+from pathlib import Path
+
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
+from django_ckeditor_5.fields import CKEditor5Field
 
 
 def _file_url(field):
@@ -17,6 +20,43 @@ def _file_url(field):
     eagerly, so `.url` on an empty FieldFile would raise ValueError.
     """
     return field.url if field else ""
+
+
+class PublishableQuerySet(models.QuerySet):
+    """Hides unpublished rows from the public site but not from staff.
+
+    Staff keep seeing drafts while signed in, which is what makes "save it now,
+    publish it later" usable: an editor can open the real page and check their
+    work before anybody else can reach it.
+    """
+
+    def visible_to(self, user):
+        if getattr(user, "is_staff", False):
+            return self
+        return self.filter(is_published=True)
+
+
+class Publishable(models.Model):
+    """Adds the draft/published switch and the shared search-result fields."""
+
+    is_published = models.BooleanField(
+        default=True,
+        verbose_name="Published",
+        help_text="Untick to hide this from the public site. Staff still see it.",
+    )
+    meta_description = models.CharField(
+        max_length=300,
+        blank=True,
+        help_text=(
+            "One or two sentences shown by Google and by Facebook, LinkedIn and "
+            "WhatsApp link previews. Falls back to the intro when left empty."
+        ),
+    )
+
+    objects = PublishableQuerySet.as_manager()
+
+    class Meta:
+        abstract = True
 
 
 class TimeStamped(models.Model):
@@ -127,8 +167,16 @@ class MenuItem(TimeStamped):
         return self.title
 
 
-class Page(TimeStamped):
-    """A standard content page addressed by its full path."""
+class Page(Publishable, TimeStamped):
+    """A standard content page addressed by its full path.
+
+    Two kinds of row live here. Most are standalone pages served by the
+    ``page_detail`` catch-all. The rest have ``is_section_page`` set and stand
+    behind one of the fixed routes in ``core/urls.py`` -- "Our Programs",
+    "Meet Our Team" and the like -- where they supply the heading, intro,
+    picture and optional extra copy that used to be hard-coded in the template.
+    See ``core.section_pages``.
+    """
 
     title = models.CharField(max_length=200)
     path = models.CharField(
@@ -141,10 +189,26 @@ class Page(TimeStamped):
         blank=True,
         help_text="Eyebrow label shown above the page title.",
     )
-    intro = models.TextField(blank=True)
-    body = models.TextField(blank=True, help_text="HTML content for the page body.")
-    hero_image = models.ImageField(upload_to="pages/", blank=True, null=True)
+    intro = models.TextField(
+        blank=True, help_text="Short paragraph under the page heading."
+    )
+    body = CKEditor5Field(blank=True, help_text="The main content of the page.")
+    hero_image = models.ImageField(
+        upload_to="pages/",
+        blank=True,
+        null=True,
+        help_text="Wide photograph behind the page heading.",
+    )
     show_newsletter = models.BooleanField(default=True)
+    is_section_page = models.BooleanField(
+        default=False,
+        verbose_name="Section landing page",
+        help_text=(
+            "Set by seed_content for the pages behind a fixed route. Their path "
+            "is what links them to that route, so changing it detaches the page "
+            "and the built-in wording comes back."
+        ),
+    )
 
     class Meta:
         ordering = ["path"]
@@ -160,12 +224,39 @@ class Page(TimeStamped):
         return _file_url(self.hero_image)
 
 
+class PageImage(models.Model):
+    """An extra picture attached to a page, shown in a grid below the body.
+
+    The rich text editor already places pictures inside the prose. This is for
+    the other case -- a set of photographs from a field visit, say -- where an
+    editor wants a gallery without laying one out by hand.
+    """
+
+    page = models.ForeignKey(Page, on_delete=models.CASCADE, related_name="gallery")
+    image = models.ImageField(upload_to="pages/gallery/")
+    caption = models.CharField(max_length=255, blank=True)
+    order = models.PositiveIntegerField(default=0)
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return self.caption or Path(self.image.name).name
+
+    @property
+    def image_url(self):
+        return _file_url(self.image)
+
+
 class FocusArea(TimeStamped):
     """The 'What We Do' pillars shown as icon cards on the home page."""
 
     title = models.CharField(max_length=160)
     slug = models.SlugField(max_length=160, unique=True)
     summary = models.TextField()
+    body = CKEditor5Field(
+        blank=True, help_text="Full description shown on the focus area page."
+    )
     icon = models.CharField(
         max_length=40,
         default="service",
@@ -197,7 +288,7 @@ class Program(TimeStamped):
     title = models.CharField(max_length=180)
     slug = models.SlugField(max_length=180, unique=True)
     summary = models.TextField()
-    body = models.TextField(blank=True)
+    body = CKEditor5Field(blank=True)
     image = models.ImageField(upload_to="programs/", blank=True, null=True)
     order = models.PositiveIntegerField(default=0)
 
@@ -221,7 +312,7 @@ class Location(TimeStamped):
     name = models.CharField(max_length=120)
     slug = models.SlugField(max_length=120, unique=True)
     summary = models.TextField(blank=True)
-    body = models.TextField(blank=True)
+    body = CKEditor5Field(blank=True)
     image = models.ImageField(upload_to="locations/", blank=True, null=True)
     is_office = models.BooleanField(
         default=False, help_text="REACHE has an office here."
@@ -268,7 +359,7 @@ class PostCategory(models.Model):
         return self.name
 
 
-class Post(TimeStamped):
+class Post(Publishable, TimeStamped):
     """Newsroom and blog entries."""
 
     title = models.CharField(max_length=255)
@@ -281,7 +372,7 @@ class Post(TimeStamped):
         related_name="posts",
     )
     excerpt = models.TextField(blank=True)
-    body = models.TextField(blank=True)
+    body = CKEditor5Field(blank=True)
     image = models.ImageField(upload_to="posts/", blank=True, null=True)
     published = models.DateField(default=timezone.now)
     is_featured = models.BooleanField(
@@ -359,7 +450,7 @@ class Job(TimeStamped):
     slug = models.SlugField(max_length=200, unique=True)
     location = models.CharField(max_length=120, default="Freetown, Sierra Leone")
     employment_type = models.CharField(max_length=80, default="Full time")
-    description = models.TextField(blank=True)
+    description = CKEditor5Field(blank=True)
     closing_date = models.DateField(null=True, blank=True)
     is_open = models.BooleanField(default=True)
 

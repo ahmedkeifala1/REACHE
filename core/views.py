@@ -5,6 +5,7 @@ from django.core.paginator import Paginator
 from django.db.models import Q
 from django.shortcuts import get_object_or_404, redirect, render
 
+from . import section_pages
 from .models import (
     ContactMessage,
     FocusArea,
@@ -23,32 +24,30 @@ from .models import (
 
 
 def home(request):
-    featured = Post.objects.filter(is_featured=True)[:5]
+    posts = Post.objects.visible_to(request.user)
     context = {
-        "featured_posts": featured,
+        "featured_posts": posts.filter(is_featured=True)[:5],
         "focus_areas": FocusArea.objects.all(),
         "stats": Stat.objects.all(),
         "locations": Location.objects.all()[:6],
-        "posts": Post.objects.all()[:6],
+        "posts": posts[:6],
         "programs": Program.objects.all()[:6],
     }
     return render(request, "pages/home.html", context)
 
 
 def page_detail(request, path):
-    page = get_object_or_404(Page, path=path.strip("/"))
+    page = get_object_or_404(
+        Page.objects.visible_to(request.user).prefetch_related("gallery"),
+        path=path.strip("/"),
+    )
     return render(request, "pages/page.html", {"page": page})
 
 
 def what_we_do(request):
     context = {
         "focus_areas": FocusArea.objects.all(),
-        "page_title": "What We Do",
-        "page_intro": (
-            "We design responsive primary health care systems that improve the "
-            "accessibility of health products and services for the hardest-to-reach "
-            "communities."
-        ),
+        "hero": section_pages.hero("what-we-do", request.user),
     }
     return render(request, "pages/what_we_do.html", context)
 
@@ -66,7 +65,10 @@ def programs(request):
     return render(
         request,
         "pages/programs.html",
-        {"programs": Program.objects.all()},
+        {
+            "programs": Program.objects.all(),
+            "hero": section_pages.hero("our-programs", request.user),
+        },
     )
 
 
@@ -83,7 +85,10 @@ def where_we_work(request):
     return render(
         request,
         "pages/where_we_work.html",
-        {"locations": Location.objects.all()},
+        {
+            "locations": Location.objects.all(),
+            "hero": section_pages.hero("where-we-work", request.user),
+        },
     )
 
 
@@ -95,13 +100,13 @@ def location_detail(request, slug):
         {
             "location": location,
             "others": Location.objects.exclude(pk=location.pk)[:3],
-            "posts": Post.objects.all()[:3],
+            "posts": Post.objects.visible_to(request.user)[:3],
         },
     )
 
 
 def newsroom(request):
-    qs = Post.objects.all()
+    qs = Post.objects.visible_to(request.user)
     category = request.GET.get("category")
     query = request.GET.get("q")
     if category:
@@ -116,13 +121,15 @@ def newsroom(request):
         "categories": PostCategory.objects.all(),
         "active_category": category,
         "query": query or "",
+        "hero": section_pages.hero("our-impact/newsroom", request.user),
     }
     return render(request, "pages/newsroom.html", context)
 
 
 def post_detail(request, slug):
-    post = get_object_or_404(Post, slug=slug)
-    related = Post.objects.exclude(pk=post.pk)
+    visible = Post.objects.visible_to(request.user)
+    post = get_object_or_404(visible, slug=slug)
+    related = visible.exclude(pk=post.pk)
     if post.category:
         related = related.filter(category=post.category)
     return render(
@@ -139,36 +146,63 @@ def team(request):
         {
             "leadership": TeamMember.objects.filter(is_leadership=True),
             "staff": TeamMember.objects.filter(is_leadership=False),
+            "hero": section_pages.hero("who-we-are/meet-our-team", request.user),
         },
     )
 
 
 def partners(request):
-    return render(request, "pages/partners.html", {"partners": Partner.objects.all()})
+    return render(
+        request,
+        "pages/partners.html",
+        {
+            "partners": Partner.objects.all(),
+            "hero": section_pages.hero("who-we-are/our-partners", request.user),
+        },
+    )
 
 
 def resources(request):
-    return render(request, "pages/resources.html", {"resources": Resource.objects.all()})
+    return render(
+        request,
+        "pages/resources.html",
+        {
+            "resources": Resource.objects.all(),
+            "hero": section_pages.hero("our-impact/resources", request.user),
+        },
+    )
 
 
 def work_for_us(request):
     return render(
-        request, "pages/jobs.html", {"jobs": Job.objects.filter(is_open=True)}
+        request,
+        "pages/jobs.html",
+        {
+            "jobs": Job.objects.filter(is_open=True),
+            "hero": section_pages.hero("get-involved/work-for-us", request.user),
+        },
     )
 
 
 def donate(request):
-    return render(request, "pages/donate.html", {"stats": Stat.objects.all()})
+    return render(
+        request,
+        "pages/donate.html",
+        {
+            "stats": Stat.objects.all(),
+            "hero": section_pages.hero("get-involved/donate", request.user),
+        },
+    )
 
 
 def search(request):
     query = (request.GET.get("q") or "").strip()
     results = {"posts": [], "pages": [], "programs": [], "locations": []}
     if query:
-        results["posts"] = Post.objects.filter(
+        results["posts"] = Post.objects.visible_to(request.user).filter(
             Q(title__icontains=query) | Q(excerpt__icontains=query)
         )[:10]
-        results["pages"] = Page.objects.filter(
+        results["pages"] = Page.objects.visible_to(request.user).filter(
             Q(title__icontains=query) | Q(intro__icontains=query)
         )[:10]
         results["programs"] = Program.objects.filter(
@@ -200,7 +234,11 @@ def contact(request):
             )
             return redirect("core:contact")
         messages.error(request, "Please complete the name, email and message fields.")
-    return render(request, "pages/contact.html")
+    return render(
+        request,
+        "pages/contact.html",
+        {"hero": section_pages.hero("get-involved/contact-us", request.user)},
+    )
 
 
 def newsletter_signup(request):

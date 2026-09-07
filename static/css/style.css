@@ -1567,3 +1567,28 @@ img {
     --slant: 22px;
   }
 }
+
+/* Galleries of extra pictures attached to a page in the admin. */
+.page-gallery {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 24px;
+}
+
+.page-gallery__item {
+  margin: 0;
+}
+
+.page-gallery__item img {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: var(--radius, 10px);
+  display: block;
+}
+
+.page-gallery__item figcaption {
+  margin-top: 10px;
+  font-size: 0.9rem;
+  color: var(--muted, #5b6670);
+}

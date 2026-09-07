@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block title %}{{ page.title }} | {{ site.organisation_name }}{% endblock %}
-{% block meta_description %}{{ page.intro|striptags|truncatewords:28 }}{% endblock %}
+{% block meta_description %}{% firstof page.meta_description page.intro|striptags|truncatewords:28 %}{% endblock %}
 
 {% block content %}
   {% include "partials/page_hero.html" with hero_title=page.title hero_eyebrow=page.section hero_text=page.intro hero_image=page.hero_image_url crumbs=page.section %}
@@ -12,6 +12,8 @@
       </div>
     </div>
   </section>
+
+  {% include "partials/gallery.html" with gallery=page.gallery.all %}
 
   {% if page.show_newsletter %}{% include "partials/newsletter.html" %}{% endif %}
 {% endblock %}

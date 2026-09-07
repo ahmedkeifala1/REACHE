@@ -1,0 +1,14 @@
+{% comment %}
+  Editor-written copy for a page behind a fixed route. Expects: hero.
+
+  Both blocks disappear when nobody has filled them in, so a section page that
+  only ever needed a heading looks exactly as it did before it became editable.
+{% endcomment %}
+{% if hero.page.body %}
+  <section class="section">
+    <div class="container">
+      <div class="prose">{{ hero.page.body|safe }}</div>
+    </div>
+  </section>
+{% endif %}
+{% include "partials/gallery.html" with gallery=hero.page.gallery.all %}

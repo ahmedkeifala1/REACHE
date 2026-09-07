@@ -5,6 +5,10 @@ from django.urls import include, path
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    # The rich text editor posts pictures here. It has to be declared before
+    # core.urls, whose flat-page catch-all would otherwise match this path and
+    # answer the upload with a 404.
+    path("ckeditor5/", include("django_ckeditor_5.urls")),
     path("", include("core.urls")),
 ]
 

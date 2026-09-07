@@ -24,6 +24,7 @@ from core.models import (
     Stat,
     TeamMember,
 )
+from core.section_pages import SECTION_PAGES
 
 # --------------------------------------------------------------- navigation
 # Mirrors the structure in organogram.jpeg.
@@ -660,6 +661,7 @@ class Command(BaseCommand):
         self.seed_locations()
         self.seed_stats()
         self.seed_pages()
+        self.seed_section_pages()
         self.seed_posts()
         self.seed_team()
         self.seed_partners()
@@ -751,6 +753,30 @@ class Command(BaseCommand):
                 },
             )
         self.stdout.write("  pages")
+
+    def seed_section_pages(self):
+        """Create the editable rows behind the fixed routes.
+
+        Unlike everything else here this uses get_or_create, not
+        update_or_create: these rows exist so an editor can rewrite the heading
+        of "Our Programs" or "Ways to Give", and re-running the seeder must not
+        undo that. Deleting a row in the admin is what resets one, and even that
+        only restores the built-in wording from core/section_pages.py.
+        """
+        created = 0
+        for section in SECTION_PAGES:
+            _, was_created = Page.objects.get_or_create(
+                path=section.path,
+                defaults={
+                    "title": section.title,
+                    "section": section.eyebrow,
+                    "intro": section.intro,
+                    "is_section_page": True,
+                    "show_newsletter": False,
+                },
+            )
+            created += was_created
+        self.stdout.write("  section landing pages ({0} new)".format(created))
 
     def seed_posts(self):
         today = datetime.date.today()

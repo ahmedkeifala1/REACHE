@@ -1,8 +1,10 @@
 {% extends "base.html" %}
-{% block title %}What We Do | {{ site.organisation_name }}{% endblock %}
+{% block title %}{{ hero.title }} | {{ site.organisation_name }}{% endblock %}
+{% block meta_description %}{% firstof hero.page.meta_description hero.text %}{% endblock %}
 
 {% block content %}
-  {% include "partials/page_hero.html" with hero_title=page_title hero_eyebrow="Our Work" hero_text=page_intro crumbs="What We Do" %}
+  {% include "partials/page_hero.html" with hero_title=hero.title hero_eyebrow=hero.eyebrow hero_text=hero.text hero_image=hero.image crumbs=hero.crumbs %}
+  {% include "partials/section_body.html" %}
 
   <section class="section section--cream">
     <div class="container">

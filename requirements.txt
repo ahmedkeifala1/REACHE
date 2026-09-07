@@ -1,3 +1,11 @@
 Django==5.1.15
 Pillow==12.2.0
 whitenoise==6.11.0
+
+# PostgreSQL. dj-database-url turns DATABASE_URL into Django's DATABASES dict,
+# which is what lets the same settings.py serve a local server and a hosted one.
+psycopg[binary]==3.2.10
+dj-database-url==3.0.1
+
+# The rich text editor behind every body field in the admin.
+django-ckeditor-5==0.2.18

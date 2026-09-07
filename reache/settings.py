@@ -3,6 +3,8 @@
 import os
 from pathlib import Path
 
+import dj_database_url
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # The defaults below are development defaults. In production set DJANGO_SECRET_KEY,
@@ -46,6 +48,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "django_ckeditor_5",
     "core",
 ]
 
@@ -83,19 +86,29 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "reache.wsgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+# The site runs on PostgreSQL. DATABASE_URL chooses the server; the default is
+# the local one the README's "Getting started" section sets up.
+#
+# Vercel cannot reach a PostgreSQL running on a laptop, so a deployment that has
+# no DATABASE_URL of its own falls back to the read-only SQLite copy bundled with
+# it -- writes there are lost at the next cold start (see "The database is
+# ephemeral" in the README). Setting DATABASE_URL on the Vercel project to a
+# hosted PostgreSQL is the single change that makes the live admin durable.
+LOCAL_DATABASE_URL = "postgres://postgres@127.0.0.1:5432/reache"
+DATABASE_URL = os.environ.get("DATABASE_URL", "" if ON_VERCEL else LOCAL_DATABASE_URL)
 
-# Everything outside /tmp is read-only on Vercel, so the database that ships with
-# the deployment is copied there on cold start. Reads are served from the copy and
-# writes succeed, but they live only as long as that instance -- an admin edit or a
-# newsletter signup is gone at the next cold start. See "Hosting" in the README for
-# the managed-Postgres setup that makes writes durable.
-if ON_VERCEL:
+if DATABASE_URL:
+    DATABASES = {
+        "default": dj_database_url.parse(
+            DATABASE_URL,
+            # Serverless instances are created and destroyed constantly, and each
+            # one holding a connection open between invocations would exhaust the
+            # server's connection slots. Locally, reusing them is the faster choice.
+            conn_max_age=0 if ON_VERCEL else 600,
+            conn_health_checks=not ON_VERCEL,
+        )
+    }
+else:
     import shutil
 
     _bundled_db = BASE_DIR / "db.sqlite3"
@@ -103,7 +116,12 @@ if ON_VERCEL:
     _runtime_db.parent.mkdir(parents=True, exist_ok=True)
     if _bundled_db.exists() and not _runtime_db.exists():
         shutil.copyfile(_bundled_db, _runtime_db)
-    DATABASES["default"]["NAME"] = _runtime_db
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.sqlite3",
+            "NAME": _runtime_db,
+        }
+    }
 
 AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"},
@@ -132,3 +150,51 @@ MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# --- Rich text editing ------------------------------------------------------
+# The body fields are HTML, so editors get CKEditor 5 rather than a textarea of
+# raw markup. "default" is deliberately the only configuration: every rich field
+# on the site offers the same toolbar, so there is nothing for an editor to
+# relearn moving between a page, a post and a programme.
+CKEDITOR_5_CONFIGS = {
+    "default": {
+        "toolbar": [
+            "heading", "|",
+            "bold", "italic", "underline", "link", "|",
+            "bulletedList", "numberedList", "blockQuote", "|",
+            "insertImage", "insertTable", "mediaEmbed", "|",
+            "outdent", "indent", "|",
+            "removeFormat", "sourceEditing", "undo", "redo",
+        ],
+        "heading": {
+            "options": [
+                {"model": "paragraph", "title": "Paragraph", "class": "ck-heading_paragraph"},
+                {"model": "heading2", "view": "h2", "title": "Heading", "class": "ck-heading_heading2"},
+                {"model": "heading3", "view": "h3", "title": "Subheading", "class": "ck-heading_heading3"},
+            ],
+        },
+        "image": {
+            "toolbar": [
+                "imageTextAlternative", "|",
+                "imageStyle:alignLeft", "imageStyle:full", "imageStyle:alignRight",
+            ],
+            "styles": ["full", "alignLeft", "alignRight"],
+        },
+        "table": {
+            "contentToolbar": ["tableColumn", "tableRow", "mergeTableCells"],
+        },
+        # Without this the editor is about six lines tall and long pages are
+        # painful to work in.
+        "height": "480px",
+        "width": "100%",
+    },
+}
+
+# Pictures dropped into a rich text field land in media/uploads/ rather than the
+# top of MEDIA_ROOT, so editor uploads stay separate from the model ImageFields
+# that seed_images manages.
+CKEDITOR_5_FILE_STORAGE = "core.storage.EditorUploadStorage"
+
+# Uploading is a staff-only action; the endpoint is otherwise an open file drop.
+CKEDITOR_5_FILE_UPLOAD_PERMISSION = "staff"
+CKEDITOR_5_UPLOAD_FILE_TYPES = ["jpeg", "jpg", "png", "gif", "webp"]
