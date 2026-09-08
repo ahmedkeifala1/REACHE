@@ -3,7 +3,7 @@
 Run with:  python manage.py setup_cms
 
 A superuser can do anything, including delete the staff accounts and empty the
-site. Most of the people who write for REACHE need none of that, so this command
+site. Most of the people who write for iREACHE LASTMILE need none of that, so this command
 builds a group that can edit every piece of content and nothing else.
 
 It is safe to re-run: permissions are set, not added to, so a group that has

@@ -1,4 +1,4 @@
-"""Content models for the REACHE Last-Mile site.
+"""Content models for the iREACHE LASTMILE site.
 
 The site mirrors the information architecture in organogram.jpeg: a small set of
 reusable content types drive every page, so editors work from the Django admin
@@ -70,12 +70,12 @@ class TimeStamped(models.Model):
 class SiteSettings(models.Model):
     """Singleton row holding global site chrome."""
 
-    organisation_name = models.CharField(max_length=120, default="REACHE Last-Mile")
+    organisation_name = models.CharField(max_length=120, default="iREACHE LASTMILE")
     tagline = models.CharField(
         max_length=255,
-        default="Innovation for Rural Empowerment in Access to Community Health and Equity",
+        default="Innovations for Rural Empowerment in Access to Community Health and Equity",
     )
-    hero_prefix = models.CharField(max_length=120, default="REACHE transforms")
+    hero_prefix = models.CharField(max_length=120, default="iREACHE LASTMILE transforms")
     hero_headline = models.CharField(
         max_length=255, default="health care delivery to reach"
     )
@@ -85,7 +85,7 @@ class SiteSettings(models.Model):
         help_text="Comma separated words cycled in the hero headline.",
     )
     hero_body = models.TextField(
-        default="REACHE Last-Mile designs responsive primary health care systems so that "
+        default="iREACHE LASTMILE designs responsive primary health care systems so that "
         "life-saving products and services reach the communities hardest to reach."
     )
     hero_image = models.ImageField(
@@ -101,14 +101,14 @@ class SiteSettings(models.Model):
         help_text="Photo beside the founding story block on the home page.",
     )
     footer_blurb = models.TextField(
-        default="REACHE Last-Mile works alongside government, communities and partners "
+        default="iREACHE LASTMILE works alongside government, communities and partners "
         "to build primary health care that reaches everyone, everywhere."
     )
     legal_line = models.CharField(
         max_length=255,
-        default="REACHE Last-Mile is a registered not-for-profit organisation",
+        default="iREACHE LASTMILE is a registered not-for-profit organisation",
     )
-    email = models.EmailField(default="info@reachelastmile.org")
+    email = models.EmailField(default="info@ireachelastmile.org")
     phone = models.CharField(max_length=60, blank=True, default="+232 00 000 000")
     address = models.CharField(
         max_length=255, blank=True, default="Freetown, Sierra Leone"
@@ -315,7 +315,7 @@ class Location(TimeStamped):
     body = CKEditor5Field(blank=True)
     image = models.ImageField(upload_to="locations/", blank=True, null=True)
     is_office = models.BooleanField(
-        default=False, help_text="REACHE has an office here."
+        default=False, help_text="iREACHE LASTMILE has an office here."
     )
     order = models.PositiveIntegerField(default=0)
 

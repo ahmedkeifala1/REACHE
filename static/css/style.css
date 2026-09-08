@@ -1,18 +1,19 @@
 /* ==========================================================================
-   REACHE Last-Mile
+   iREACHE LASTMILE
    Layout and design system modelled on the villagereach.org structure,
-   recoloured to the REACHE brand (deep green + rust from the logo).
+   recoloured to the iREACHE LASTMILE brand: the deep forest green and burnt rust
+   sampled from Logo.jpeg.
    ========================================================================== */
 
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Source+Sans+3:ital,wght@0,300..900;1,300..900&display=swap");
 
 :root {
   /* Brand */
-  --green: #0b5d34;
-  --green-dark: #084526;
-  --green-light: #157a47;
-  --rust: #c1450e;
-  --rust-dark: #a2390b;
+  --green: #015531;
+  --green-dark: #013a21;
+  --green-light: #0a7043;
+  --rust: #b8512b;
+  --rust-dark: #94401f;
 
   /* Neutrals / earth tones carried over from the reference layout */
   --slate: #424f57;

@@ -1,7 +1,36 @@
-# REACHE Last-Mile
+# iREACHE LASTMILE
 
-Django website for REACHE Last-Mile — an NGO building primary health care that
+Django website for iREACHE LASTMILE — an NGO building primary health care that
 reaches the hardest-to-reach communities in Sierra Leone.
+
+## Where the content comes from
+
+The site's copy is derived from **REACH 360° Community Health Systems
+Strengthening Framework — Master Document v1.0**
+(`REACH_360_Framework_Master_Document_v1.0.docx`, published open-access under
+CC BY 4.0). That document is the authority: the seven pillars, BRIDGE 360°
+LASTMILE CARE and its five delivery mechanisms, the ProcCHW cadre, the
+Three-Systems Connection Theory, the Four Constitutional Foundations and the
+vision, mission and values all come from it, and `seed_content` reproduces them.
+
+The naming follows the document. The organisation is **iREACHE LASTMILE** on
+the site as it is in the document, its contact address is on
+`ireachelastmile.org`, and `SiteSettings.tagline` uses the document's plural,
+"**Innovations** for Rural Empowerment…", which is what the *i* in iREACHE
+stands for. An earlier round of content called the organisation "REACHE
+Last-Mile" and used the singular; `SUPERSEDED_SETTINGS` in `seed_content`
+rewrites that wording wherever an older database still carries it, and leaves
+any field an editor has since changed in the CMS alone.
+
+One detail is **not** settled: the document puts the headquarters in **Kenema,
+Eastern Province**, with a Freetown policy and partnership liaison office, while
+`SiteSettings.address` says "Freetown, Sierra Leone". The address was left as it
+is — it is a fact about the organisation rather than a wording choice.
+
+The palette in `static/css/style.css` is sampled from `Logo.jpeg` — deep forest
+green `#015531` and burnt rust `#b8512b`. The document specifies `#1A4731` /
+`#B55334` and Georgia; the logo colours were used in preference, and the
+typefaces were left as they are.
 
 ## Stack
 
@@ -54,7 +83,7 @@ DATABASE_URL=postgres://user:password@host:5432/dbname python manage.py migrate
 | `core/storage.py` | Sends pictures uploaded inside the editor to `media/uploads/` |
 | `core/admin.py` | The CMS itself — thumbnails, draft/publish, grouped fields |
 | `core/context_processors.py` | Injects `site` and `main_menu` into every template |
-| `core/management/commands/seed_content.py` | Rebuilds the menu and (re)seeds starter content; safe to re-run |
+| `core/management/commands/seed_content.py` | Rebuilds the menu and (re)seeds the framework content; safe to re-run |
 | `core/management/commands/seed_images.py` | Attaches the placeholder photo library to that content; safe to re-run |
 | `core/management/commands/setup_cms.py` | Creates the Editors group; safe to re-run |
 | `core/seed_assets/` | The placeholder photo library and its `CREDITS.md` |
@@ -148,7 +177,10 @@ python manage.py test core
 
 The suite seeds the site, renders every route and flat page, crawls every internal
 link from the home page for 404s, and exercises the search, contact and newsletter
-forms. It also covers the CMS: that every section landing page is created and
+forms. It checks that the seven pillars are seeded in the order the Master Document
+numbers them and that each renders its body, that the REACH 360° pages exist, and
+that the focus areas and statistics the placeholder content left behind are cleared
+out on re-seed. It also covers the CMS: that every section landing page is created and
 that editing one changes the page, that drafts are hidden from visitors but not
 from staff, that the Editors group cannot reach user accounts, and that an
 anonymous picture upload is refused.
@@ -239,7 +271,7 @@ Development defaults live in `reache/settings.py`. In production set:
 | `DJANGO_SECRET_KEY` | Long random value |
 | `DJANGO_DEBUG` | `0` |
 | `DJANGO_ALLOWED_HOSTS` | Comma-separated hostnames |
-| `DJANGO_CSRF_TRUSTED_ORIGINS` | Comma-separated origins, e.g. `https://reachelastmile.org` |
+| `DJANGO_CSRF_TRUSTED_ORIGINS` | Comma-separated origins, e.g. `https://ireachelastmile.org` |
 
 With `DJANGO_DEBUG=0` the HTTPS, HSTS and secure-cookie settings switch on
 automatically. Then run `python manage.py collectstatic` and serve `staticfiles/`

@@ -4,27 +4,35 @@
 {% block content %}
   {% include "partials/page_hero.html" with hero_title=area.title hero_eyebrow="What We Do" hero_text=area.summary hero_image=area.image_url crumbs="What We Do" %}
 
-  <section class="section">
-    <div class="container">
-      <div class="split">
+  {% if area.body %}
+    <section class="section">
+      <div class="container">
         <div class="prose">
-          <h2>How we work</h2>
-          <p>{{ area.summary }}</p>
-          <p>{{ site.organisation_name }} designs this work with government and community partners so that
-             it strengthens the existing health system rather than running alongside it. Every engagement
-             begins with the realities of the last mile and ends with capability that stays behind.</p>
+          {{ area.body|safe }}
           <a class="btn btn--green" href="{% url 'core:contact' %}">Work With Us</a>
         </div>
-        <div class="split__media">
-          {% if area.image_url %}
-            <img src="{{ area.image_url }}" alt="" loading="lazy">
-          {% else %}
-            <div class="placeholder">{{ area.title }}</div>
-          {% endif %}
+      </div>
+    </section>
+  {% else %}
+    <section class="section">
+      <div class="container">
+        <div class="split">
+          <div class="prose">
+            <h2>How we work</h2>
+            <p>{{ area.summary }}</p>
+            <a class="btn btn--green" href="{% url 'core:contact' %}">Work With Us</a>
+          </div>
+          <div class="split__media">
+            {% if area.image_url %}
+              <img src="{{ area.image_url }}" alt="" loading="lazy">
+            {% else %}
+              <div class="placeholder">{{ area.title }}</div>
+            {% endif %}
+          </div>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  {% endif %}
 
   {% if others %}
   <section class="section section--cream">

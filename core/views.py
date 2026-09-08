@@ -1,4 +1,4 @@
-"""Views for the REACHE Last-Mile site."""
+"""Views for the iREACHE LASTMILE site."""
 
 from django.contrib import messages
 from django.core.paginator import Paginator

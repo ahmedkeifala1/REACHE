@@ -1,4 +1,4 @@
-"""Django settings for the REACHE Last-Mile website."""
+"""Django settings for the iREACHE LASTMILE website."""
 
 import os
 from pathlib import Path

@@ -34,9 +34,9 @@ SECTION_PAGES = (
         "what-we-do",
         "What We Do",
         "Our Work",
-        "We design responsive primary health care systems that improve the "
-        "accessibility of health products and services for the hardest-to-reach "
-        "communities.",
+        "The seven pillars of the REACH 360 Framework. Each addresses one WHO "
+        "health system building block, carries a Sierra Leone-original "
+        "contribution, and fails without the other six.",
         "What We Do",
     ),
     SectionPage(

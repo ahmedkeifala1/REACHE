@@ -1,4 +1,4 @@
-"""Smoke tests for the REACHE Last-Mile site.
+"""Smoke tests for the iREACHE LASTMILE site.
 
 The suite seeds the site once per class with the same management command the
 project ships with, then walks the navigation the way a visitor would.
@@ -22,6 +22,8 @@ from .models import (
     PageImage,
     Post,
     Program,
+    SiteSettings,
+    Stat,
 )
 from .section_pages import SECTION_PAGES
 
@@ -101,6 +103,113 @@ class SeededSiteTests(TestCase):
                     queue.append(href)
         self.assertEqual(broken, [], "Broken internal links: {0}".format(broken))
         self.assertGreater(len(seen), 20)
+
+
+class FrameworkContentTests(TestCase):
+    """The site's content is the REACH 360 Master Document, not placeholder copy."""
+
+    #  The seven pillars, in the order the Master Document numbers them.
+    PILLARS = [
+        "connected-health-workforce",
+        "community-intelligence-and-surveillance-system",
+        "last-mile-supply-chain-and-commodity-access",
+        "sustainable-health-financing-and-domestic-resource-mobilisation",
+        "three-authority-community-governance-and-accountability",
+        "proactive-community-health-service-delivery",
+        "driving-sustained-impact-through-strategic-partnerships",
+    ]
+
+    FRAMEWORK_PAGES = [
+        "our-model",
+        "our-model/the-challenge",
+        "our-model/bridge-360",
+        "our-model/lastmile-care",
+        "our-model/procchw",
+        "reach-360",
+        "reach-360/three-systems",
+        "reach-360/foundations",
+        "reach-360/idhs",
+    ]
+
+    @classmethod
+    def setUpTestData(cls):
+        call_command("seed_content", verbosity=0)
+
+    def test_seven_pillars_are_seeded_in_document_order(self):
+        seeded = list(
+            FocusArea.objects.order_by("order").values_list("slug", flat=True)
+        )
+        self.assertEqual(seeded, self.PILLARS)
+
+    def test_every_pillar_carries_a_body(self):
+        for area in FocusArea.objects.all():
+            with self.subTest(pillar=area.slug):
+                self.assertIn("WHO building block", area.body)
+
+    def test_pillar_pages_render_their_body(self):
+        for area in FocusArea.objects.all():
+            with self.subTest(pillar=area.slug):
+                response = self.client.get("/what-we-do/{0}/".format(area.slug))
+                self.assertContains(response, "WHO building block")
+
+    def test_framework_pages_exist_and_render(self):
+        for path in self.FRAMEWORK_PAGES:
+            with self.subTest(path=path):
+                self.assertTrue(Page.objects.filter(path=path).exists())
+                response = self.client.get("/{0}/".format(path))
+                self.assertEqual(response.status_code, 200)
+
+    def test_bridge_360_is_the_documents_acronym(self):
+        """The pre-document seed invented a different expansion of BRIDGE."""
+        response = self.client.get("/our-model/bridge-360/")
+        self.assertContains(response, "esilient")
+        self.assertNotContains(response, "Baseline")
+
+    def test_superseded_focus_areas_are_removed(self):
+        FocusArea.objects.create(
+            slug="drive-sustained-impact-through-strategic-partnership",
+            title="Superseded",
+            summary="",
+        )
+        call_command("seed_content", verbosity=0)
+        self.assertEqual(FocusArea.objects.count(), len(self.PILLARS))
+
+    def test_site_is_named_for_the_document(self):
+        """The document names the organisation iREACHE LASTMILE throughout."""
+        settings_obj = SiteSettings.load()
+        self.assertEqual(settings_obj.organisation_name, "iREACHE LASTMILE")
+        # The *i* stands for the plural "Innovations".
+        self.assertTrue(settings_obj.tagline.startswith("Innovations for Rural"))
+        self.assertContains(self.client.get("/"), "iREACHE LASTMILE")
+
+    def test_superseded_site_settings_are_rewritten(self):
+        settings_obj = SiteSettings.load()
+        settings_obj.organisation_name = "REACHE Last-Mile"
+        settings_obj.tagline = (
+            "Innovation for Rural Empowerment in Access to Community Health and Equity"
+        )
+        settings_obj.email = "info@reachelastmile.org"
+        settings_obj.save()
+        call_command("seed_content", verbosity=0)
+        settings_obj = SiteSettings.load()
+        self.assertEqual(settings_obj.organisation_name, "iREACHE LASTMILE")
+        self.assertTrue(settings_obj.tagline.startswith("Innovations for Rural"))
+        self.assertEqual(settings_obj.email, "info@ireachelastmile.org")
+
+    def test_settings_an_editor_has_changed_are_left_alone(self):
+        settings_obj = SiteSettings.load()
+        settings_obj.footer_blurb = "Wording the communications team chose."
+        settings_obj.save()
+        call_command("seed_content", verbosity=0)
+        self.assertEqual(
+            SiteSettings.load().footer_blurb, "Wording the communications team chose."
+        )
+
+    def test_placeholder_statistics_are_removed(self):
+        Stat.objects.create(value="2,400,000", label="Placeholder")
+        call_command("seed_content", verbosity=0)
+        self.assertFalse(Stat.objects.filter(value="2,400,000").exists())
+        self.assertTrue(Stat.objects.filter(value="6,800").exists())
 
 
 class SearchTests(TestCase):

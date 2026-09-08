@@ -1,4 +1,4 @@
-"""Admin configuration -- this is the CMS the REACHE team works in.
+"""Admin configuration -- this is the CMS the iREACHE LASTMILE team works in.
 
 Three things shape the setup below. Every picture field shows a thumbnail, so an
 editor can tell at a glance which rows still carry placeholder photography.
@@ -29,8 +29,8 @@ from .models import (
     TeamMember,
 )
 
-admin.site.site_header = "REACHE Last-Mile"
-admin.site.site_title = "REACHE Last-Mile"
+admin.site.site_header = "iREACHE LASTMILE"
+admin.site.site_title = "iREACHE LASTMILE"
 admin.site.index_title = "Website content"
 
 

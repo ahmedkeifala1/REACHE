@@ -34,12 +34,12 @@ SITE_IMAGES = {
 
 FOCUS_IMAGES = {
     "proactive-community-health-service-delivery": "community-health-visit.jpg",
-    "connected-health-workforce-strengthening": "health-education.jpg",
-    "community-intelligence-surveillance-systems": "data-review.jpg",
-    "last-mile-supply-chain-and-community-access": "cold-chain.jpg",
-    "sustainable-health-financing-and-domestic-resource-mobilization": "pharmacy-stock.jpg",
-    "three-authority-community-government-and-accountability": "partnership-meeting.jpg",
-    "drive-sustained-impact-through-strategic-partnership": "partnership-hands.jpg",
+    "connected-health-workforce": "health-education.jpg",
+    "community-intelligence-and-surveillance-system": "data-review.jpg",
+    "last-mile-supply-chain-and-commodity-access": "cold-chain.jpg",
+    "sustainable-health-financing-and-domestic-resource-mobilisation": "pharmacy-stock.jpg",
+    "three-authority-community-governance-and-accountability": "partnership-meeting.jpg",
+    "driving-sustained-impact-through-strategic-partnerships": "partnership-hands.jpg",
 }
 
 PROGRAM_IMAGES = {
@@ -82,6 +82,11 @@ PAGE_IMAGES = {
     "our-model/bridge-360": "partnership-hands.jpg",
     "our-model/lastmile-care": "mother-and-baby.jpg",
     "our-model/the-challenge": "vaccine-delivery.jpg",
+    "our-model/procchw": "health-education.jpg",
+    "reach-360": "last-mile-road.jpg",
+    "reach-360/three-systems": "partnership-meeting.jpg",
+    "reach-360/foundations": "community-health-visit.jpg",
+    "reach-360/idhs": "data-review.jpg",
     "our-impact": "immunization-campaign.jpg",
     "our-impact/governance-and-financials": "data-review.jpg",
     "our-impact/history": "milestone.jpg",
