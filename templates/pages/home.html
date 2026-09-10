@@ -9,18 +9,40 @@
 {# ------------------------------------------------------------------ hero #}
 {# Full-bleed photograph with a solid brand wedge cut across it on a         #}
 {# diagonal, the headline running from the wedge out over the photo. The     #}
-{# closing word is set much larger and heavier than the lines above it.      #}
+{# closing line is set much larger and heavier than the lines above it, and  #}
+{# under it sit the standfirst, the three actions and the four framing       #}
+{# figures the REACH 360 website document opens with.                        #}
 <section class="hero">
   <div class="hero__bg" style="background-image:url('{% if site.hero_image_url %}{{ site.hero_image_url }}{% else %}{% static 'img/hero.svg' %}{% endif %}');"></div>
   <div class="hero__scrim" aria-hidden="true"></div>
   <div class="hero__wedge" aria-hidden="true"></div>
 
   <div class="container hero__inner">
+    {% if site.hero_eyebrow %}<p class="hero__eyebrow">{{ site.hero_eyebrow }}</p>{% endif %}
     <h1 class="hero__title">
       <span class="hero__line">{{ site.hero_prefix }}</span>
       <span class="hero__line">{{ site.hero_headline }}</span>
       <span class="hero__rotator" id="heroRotator" data-words="{{ site.hero_rotating_words }}">{{ site.rotating_words.0 }}</span>
     </h1>
+    <p class="hero__body">{{ site.hero_body }}</p>
+    <div class="hero__actions">
+      <a class="btn btn--primary" href="/our-model/">Our Model</a>
+      <a class="btn btn--ghost" href="/who-we-are/founding-story/">Read Our Story</a>
+      <a class="btn btn--ghost btn--quiet" href="/our-impact/">Our Impact</a>
+    </div>
+
+    {# The four framing figures, sitting on the wedge under the headline. #}
+    {% if hero_stats %}
+      <div class="hero__stats">
+        {% for stat in hero_stats %}
+          <div class="hero-stat">
+            <div class="hero-stat__value">{{ stat.value }}</div>
+            <p class="hero-stat__label">{{ stat.label }}</p>
+            {% if stat.caption %}<p class="hero-stat__caption">{{ stat.caption }}</p>{% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
   </div>
 </section>
 
@@ -130,7 +152,7 @@
          community health workers despite shocks and stresses. We use technology and innovation to create
          new pathways to care.</p>
     </div>
-    <div class="stats__grid">
+    <div class="stats__grid stats__grid--compact">
       {% for stat in stats %}
         <div class="stat">
           <div class="stat__value">{{ stat.value }}</div>

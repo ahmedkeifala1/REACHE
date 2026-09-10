@@ -114,6 +114,7 @@ MENU = [
             ("The Three-Systems Connection Theory", "/reach-360/three-systems/"),
             ("The Four Constitutional Foundations", "/reach-360/foundations/"),
             ("Intelligent Digital Health Systems", "/reach-360/idhs/"),
+            ("The Connection Quality Index", "/reach-360/connection-quality-index/"),
             ("The Seven Pillars", "/what-we-do/"),
         ],
     ),
@@ -437,51 +438,96 @@ PROGRAMS = [
 ]
 
 # ---------------------------------------------------------------- content
-STATS = [
-    ("6,800", "Professional Connected Community Health Workers across Sierra Leone by 2031."),
-    ("16", "districts \u2014 every district in the country \u2014 within the programme by 2031."),
-    ("70\u201380%", "of programme costs met from Sierra Leone's own domestic budgets by 2031."),
+# The four figures printed as cards inside the home page hero: the value, the
+# sentence under it, and the short qualifier under that.
+HERO_STATS = [
+    ("6,800", "ProcCHWs across all 16 districts by 2031", "All districts"),
+    ("4.5M", "People in underserved and zero-dose communities", "By 2031"),
+    (
+        "354",
+        "Maternal deaths per 100,000 — the number we are here to change",
+        "Target < 300",
+    ),
+    (
+        "$1",
+        "The cost to treat the infection that killed Mariama — 14 hours old",
+        "Why we exist",
+    ),
 ]
 
-# Stat values carried by the pre-framework placeholder content, removed on seed.
-LEGACY_STAT_VALUES = ["2,400,000", "8,500", "640"]
+# The compact row across the angled green band: the same figures, fewer words.
+BAND_STATS = [
+    ("6,800", "ProcCHWs by 2031"),
+    ("16", "Districts"),
+    ("4.5M", "People reached"),
+    ("354→300", "MMR target"),
+    ("$1", "Cost of Mariama's cure"),
+]
 
-# Wording on the SiteSettings singleton that the Master Document supersedes.
-# The document names the organisation iREACHE LASTMILE and expands the *i* as the
-# plural "Innovations"; databases seeded before it arrived carry the old wording.
-# Each field is only rewritten when it still holds the exact superseded string, so
-# anything an editor has changed in the CMS is left alone.
+# Stat values carried by earlier content, deleted on seed. The first three are
+# the pre-framework placeholders; the last is the domestic financing figure the
+# band carried before the document cut it down to the five figures above.
+LEGACY_STAT_VALUES = ["2,400,000", "8,500", "640", "70–80%"]
+
+# Wording on the SiteSettings singleton that later documents supersede.
+# The Master Document named the organisation iREACHE LASTMILE and expanded the
+# *i* as the plural "Innovations"; the REACH 360 website document then replaced
+# the home page hero with the headline, standfirst and eyebrow it specifies.
+# Each field lists every wording it has carried, oldest first, followed by the
+# wording it should carry now. A field is only rewritten when it still holds one
+# of those exact strings (or nothing at all), so anything an editor has changed
+# in the CMS is left alone.
 SUPERSEDED_SETTINGS = {
     "organisation_name": (
-        "REACHE Last-Mile",
+        ("REACHE Last-Mile",),
         "iREACHE LASTMILE",
     ),
     "tagline": (
-        "Innovation for Rural Empowerment in Access to Community Health and Equity",
+        ("Innovation for Rural Empowerment in Access to Community Health and Equity",),
         "Innovations for Rural Empowerment in Access to Community Health and Equity",
     ),
+    "hero_eyebrow": (
+        (),
+        "Sierra Leone · Eastern Province · 2026",
+    ),
     "hero_prefix": (
-        "REACHE transforms",
-        "iREACHE LASTMILE transforms",
+        ("REACHE transforms", "iREACHE LASTMILE transforms"),
+        "Building the health system",
+    ),
+    "hero_headline": (
+        ("health care delivery to reach",),
+        "Sierra Leone's communities",
+    ),
+    "hero_rotating_words": (
+        ("everyone,every mother,every newborn,every village",),
+        "have always deserved.",
     ),
     "hero_body": (
-        "REACHE Last-Mile designs responsive primary health care systems so that "
-        "life-saving products and services reach the communities hardest to reach.",
-        "iREACHE LASTMILE designs responsive primary health care systems so that "
-        "life-saving products and services reach the communities hardest to reach.",
+        (
+            "REACHE Last-Mile designs responsive primary health care systems so that "
+            "life-saving products and services reach the communities hardest to reach.",
+            "iREACHE LASTMILE designs responsive primary health care systems so that "
+            "life-saving products and services reach the communities hardest to reach.",
+        ),
+        "iREACHE LASTMILE connects three systems that have never governed community "
+        "health together — traditional authority, government, and community "
+        "intelligence — through 6,800 ProcCHWs reaching every last-mile household "
+        "every month.",
     ),
     "footer_blurb": (
-        "REACHE Last-Mile works alongside government, communities and partners "
-        "to build primary health care that reaches everyone, everywhere.",
+        (
+            "REACHE Last-Mile works alongside government, communities and partners "
+            "to build primary health care that reaches everyone, everywhere.",
+        ),
         "iREACHE LASTMILE works alongside government, communities and partners "
         "to build primary health care that reaches everyone, everywhere.",
     ),
     "legal_line": (
-        "REACHE Last-Mile is a registered not-for-profit organisation",
+        ("REACHE Last-Mile is a registered not-for-profit organisation",),
         "iREACHE LASTMILE is a registered not-for-profit organisation",
     ),
     "email": (
-        "info@reachelastmile.org",
+        ("info@reachelastmile.org",),
         "info@ireachelastmile.org",
     ),
 }
@@ -587,19 +633,34 @@ PAGES = [
         "who-we-are",
         "Who We Are",
         "Who We Are",
-        "We are a last-mile health organisation working to make primary health care "
-        "reliable for the communities furthest from it.",
+        "We are a community health system strengthening organisation working at the "
+        "last mile, to make primary health care reliable and accessible for the "
+        "communities furthest from it.",
         """
-        <p>iREACHE LASTMILE exists to close the distance between health systems and the
-        people they are meant to serve. We work at the point where supply chains end,
-        where road networks thin out, and where a missed delivery becomes a missed
-        childhood vaccination.</p>
-        <h2>What guides us</h2>
-        <p>Our work is built with government rather than beside it. We design for the
-        systems that will still be running after a programme closes, and we measure
-        ourselves on whether local institutions can carry the work forward.</p>
-        <blockquote>The distance between a health product and the person who needs it
-        should never decide whether they live.</blockquote>
+        <blockquote>We are not the Sierra Leonean version of a global model. We are the
+        first nationally-rooted community health systems institution Sierra Leone has
+        produced — designed, from its founding moment, to build a community health system
+        that belongs permanently to this country and to the people who live here.</blockquote>
+        <p>iREACHE LASTMILE was founded on a different diagnosis — and a different
+        solution.</p>
+        <p>We are not a community health delivery organisation. We are a community health
+        systems connection organisation. Our model — LASTMILE CARE — puts Professional
+        Connected Community Health Workers, ProcCHWs, at the doorstep of every household
+        in our programme communities every single month. But a ProcCHW in our model is not
+        a service delivery agent. They are a systems connector — the human infrastructure
+        through which the Traditional Authority System, the Government Health System and
+        the Community Epidemiological System exchange intelligence, align authority, and
+        govern community health together.</p>
+        <h2>Our vision</h2>
+        <p>A Sierra Leone where every person — in every last-mile community, regardless of
+        distance or poverty — receives proactive, dignified community health care from a
+        professional workforce their own community governs and their own government
+        sustains.</p>
+        <h2>Our mission</h2>
+        <p>iREACHE LASTMILE saves lives at the last mile by deploying Professional
+        Connected Community Health Workers who bring proactive, AI-supported care to every
+        doorstep — bridging traditional authority, government and community into a health
+        system that is community-governed and built to last.</p>
         <h2>Explore</h2>
         <ul>
           <li><a href="/who-we-are/mission-vision-values/">Mission, Vision &amp; Values</a></li>
@@ -619,72 +680,314 @@ PAGES = [
         "Innovations for Rural Empowerment in Access to Community Health and Equity.",
         """
         <h2>Vision</h2>
-        <p>A Sierra Leone where every person — in every community, regardless of
-        geography, poverty, gender or social circumstance — has equitable access to
-        quality community health care delivered by a professional, compensated and
-        connected workforce, integrated within a government-owned, domestically financed
-        and intelligently supported health system.</p>
+        <p>A Sierra Leone where every person — in every last-mile community, regardless of
+        distance or poverty — receives proactive, dignified community health care from a
+        professional workforce their own community governs and their own government
+        sustains.</p>
         <h2>Mission</h2>
-        <p>To strengthen Sierra Leone's community health systems by deploying, training,
-        equipping, supervising, compensating and institutionalising a national workforce
-        of Professional Connected Community Health Workers — governed by communities,
-        integrated into government systems, supported by Intelligent Digital Health
-        Systems and sustained through domestic financing — through the
+        <p>iREACHE LASTMILE saves lives at the last mile by deploying Professional
+        Connected Community Health Workers who bring proactive, AI-supported care to every
+        doorstep — bridging traditional authority, government and community into a health
+        system that is community-governed and built to last, through the
         <a href="/reach-360/">REACH 360° Community Health Systems Strengthening
         Framework</a>.</p>
+        <h2>Organisational values</h2>
+        <p>Eight values, and what each one means in practice here rather than in a
+        statement of intent.</p>
+        <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Value</th>
+              <th scope="col">What it means in practice at iREACHE LASTMILE</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">Equity</th>
+              <td>Equity is the spine of the REACH 360° Framework — not a cross-cutting
+              theme or a compliance requirement. Every resource allocation, system design,
+              AI tool deployment and advocacy effort is directed first toward the
+              communities most excluded from health outcomes. The communities with the
+              highest burden receive the most intensive support. We measure success by
+              narrowing the gap between the best-served and worst-served communities — not
+              by improving programme averages while inequalities widen.</td>
+            </tr>
+            <tr>
+              <th scope="row">Excellence</th>
+              <td>We apply the highest technical and operational standards — modelled on
+              Living Goods' supervision rigour, VillageReach's supply chain discipline,
+              Muso's proactive care commitment and WHO's Responsible AI Ethics principles.
+              We do not deploy tools, protocols or systems that have not been validated in
+              Sierra Leone's specific context. We publish our methods and our results —
+              including our failures — so that excellence is verifiable rather than
+              claimed.</td>
+            </tr>
+            <tr>
+              <th scope="row">Accountability</th>
+              <td>We are accountable first to communities, then to government, then to
+              donors — in that order. Community Health Committees govern programme
+              decisions. DHMTs co-lead all supervision. Toll-free accountability hotlines
+              give every community member a direct line to programme leadership. Annual
+              Open House meetings make programme results publicly available and publicly
+              contestable. We do not manage accountability. We build it into programme
+              architecture.</td>
+            </tr>
+            <tr>
+              <th scope="row">Co-ownership</th>
+              <td>Doing WITH, not doing FOR is a programme design specification, not a
+              communications aspiration. Communities select their ProcCHWs. Traditional
+              Authority Health Governance Councils hold formal programme accountability.
+              Community Health Committees make real governance decisions with real
+              consequences. Co-ownership is the mechanism through which
+              <a href="/our-model/bridge-360/">BRIDGE 360° LASTMILE CARE</a> outlasts
+              iREACHE LASTMILE's direct involvement. It is what transforms a programme
+              into a system.</td>
+            </tr>
+            <tr>
+              <th scope="row">Government primacy</th>
+              <td>Every system iREACHE LASTMILE builds is designed from its first day to be
+              owned, financed and operated by the Government of Sierra Leone. We build no
+              parallel infrastructure. We create no data systems that the government cannot
+              access independently. We design no digital health tools that require iREACHE
+              LASTMILE's technical team to interpret. We measure our success by how little
+              Sierra Leone needs iREACHE LASTMILE at the end of the programme — not by how
+              much.</td>
+            </tr>
+            <tr>
+              <th scope="row">Evidence</th>
+              <td>Every programme decision is grounded in data. The REACH 360° Crosswalk
+              documents the evidence base for every framework element with the precision of
+              a scientific citation — naming the specific international inspiration, the
+              specific Sierra Leone evidence source and the specific original contribution.
+              We treat our implementation experience as research data and publish it
+              through peer-reviewed journals, open-access Learning Briefs and the annual
+              REACH 360° Crosswalk update.</td>
+            </tr>
+            <tr>
+              <th scope="row">Human primacy in digital health</th>
+              <td>Digital and AI tools assist human care; they do not replace it. The
+              ProcCHW's judgment, the community's trust, the traditional authority's
+              endorsement and the government's clinical protocol are always the primary
+              governing layer. Every tool must pass the
+              <a href="/reach-360/idhs/">TRIAD AI Test</a> before it is deployed.</td>
+            </tr>
+            <tr>
+              <th scope="row">Dignity</th>
+              <td>Communities are rights-holders and governing partners, not passive
+              beneficiaries. We listen before we design. We ask before we assume. We
+              co-create rather than implement.</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
         <blockquote>Empowerment means doing WITH, not doing FOR.</blockquote>
-        <h2>Our values</h2>
-        <ul>
-          <li><strong>Equity.</strong> Equity is the spine of the REACH 360° Framework,
-          not a cross-cutting theme. Every resource allocation, system design and advocacy
-          effort is directed first toward the communities most excluded from health
-          outcomes. We measure success by narrowing the gap between the best-served and
-          worst-served communities — not by improving averages while inequalities
-          widen.</li>
-          <li><strong>Excellence.</strong> We do not deploy tools, protocols or systems
-          that have not been validated in Sierra Leone's specific context. We publish our
-          methods and our results — including our failures — so that excellence is
-          verifiable rather than claimed.</li>
-          <li><strong>Accountability.</strong> We are accountable first to communities,
-          then to government, then to donors, in that order. We do not manage
-          accountability; we build it into programme architecture.</li>
-          <li><strong>Co-ownership.</strong> Doing WITH, not doing FOR is a design
-          specification, not a communications aspiration. Communities select their
-          ProcCHWs. Traditional Authority Health Governance Councils hold formal
-          accountability. Community Health Committees make real decisions with real
-          consequences.</li>
-          <li><strong>Government primacy.</strong> Every system we build is designed from
-          its first day to be owned, financed and operated by the Government of Sierra
-          Leone. We build no parallel infrastructure. We measure our success by how little
-          Sierra Leone needs us at the end.</li>
-          <li><strong>Evidence.</strong> Every programme decision is grounded in data, and
-          we treat our own implementation experience as research data to be published.</li>
-          <li><strong>Human primacy in digital health.</strong> Digital and AI tools assist
-          human care; they do not replace it. The ProcCHW's judgment, the community's
-          trust, the traditional authority's endorsement and the government's clinical
-          protocol are always the primary governing layer.</li>
-          <li><strong>Dignity.</strong> Communities are rights-holders and governing
-          partners, not passive beneficiaries. We listen before we design. We ask before
-          we assume. We co-create rather than implement.</li>
-        </ul>
         """,
     ),
     (
         "who-we-are/our-approach",
         "Our Approach",
         "Who We Are",
-        "Designing responsive primary health care around the realities of the last mile.",
+        "Three-Systems Connection Theory: Sierra Leone's community health crisis is not "
+        "a CHW performance problem. It is a systems disconnection problem.",
         """
-        <p>We begin every engagement by mapping the actual conditions of the last mile:
-        the roads, the stock-outs, the staffing gaps and the trust deficits. Only then do
-        we design.</p>
-        <h2>How we work</h2>
-        <ul>
-          <li><strong>Diagnose with the community.</strong> Local health workers define the problem with us.</li>
-          <li><strong>Design with government.</strong> Solutions sit inside national systems from day one.</li>
-          <li><strong>Test in the hardest place.</strong> If it works at the last mile, it works everywhere.</li>
-          <li><strong>Hand over deliberately.</strong> Capability transfer is a work stream, not an afterthought.</li>
-        </ul>
+        <blockquote>Sierra Leone's community health crisis is not a CHW performance
+        problem. It is a systems disconnection problem.</blockquote>
+        <p>Three systems that must govern community health together have been operating in
+        near-total isolation for decades. Every programme that treated CHW performance as
+        the primary problem failed because it addressed a symptom while leaving the
+        disconnection — the disease — untreated.</p>
+        <h2>Why the standard diagnosis is wrong</h2>
+        <p>The standard diagnosis of Sierra Leone's community health crisis runs as
+        follows: CHWs are poorly trained, inadequately equipped, insufficiently supervised
+        and uncompensated — therefore if we address these four deficiencies, health
+        outcomes will improve. This diagnosis is not false. CHWs in Sierra Leone have
+        historically been all of these things. But the diagnosis is incomplete in a way
+        that has made every previous solution temporary.</p>
+        <p>A CHW who is well trained, well equipped, well supervised and appropriately
+        compensated but operating inside a disconnected system — where traditional
+        authority structures have no role in health governance, where community
+        surveillance intelligence never reaches DHMT planning, and where the government
+        health system remains institutionally and geographically distant — is a
+        high-performing individual inside a failing system. Individual performance
+        improvements in a disconnected system produce episodic health gains during the
+        programme cycle and systemic collapse when the programme ends. The gains disappear
+        because the system that produced the need for those gains has not changed.</p>
+        <h2>Three groups of people, none of them talking to each other</h2>
+        <p>Sierra Leone has three groups of people who each hold something essential for
+        community health. None of them talk to each other.</p>
+        <p>That is the problem the <a href="/reach-360/">REACH 360° Framework</a> was
+        designed to solve. Not CHW performance. Not supply chains. Not financing. Those are
+        real problems. But they are symptoms. The disease underneath all of them is this:
+        three groups of people who each hold something the others need — and who have
+        never been connected into a single governing system.</p>
+        <h2>System one: the Traditional Authority System — social legitimacy</h2>
+        <p>Walk into any remote village in Kenema district. You will not find a government
+        official. You will not find a DHMT representative. You may not find a health worker
+        of any kind. But you will find a chief.</p>
+        <p>A Section Chief. A Paramount Chief. A Bondo society leader. A women's group. A
+        farmers' cooperative. These are the people who have governed community life in
+        Sierra Leone for generations — long before the Republic of Sierra Leone existed as
+        a legal entity, long before any Ministry of Health was established, long before any
+        donor funded any health programme in any district. These structures are not
+        ceremonial and they are not advisory. They are governing. They make decisions that
+        communities obey. They settle disputes. They control land. They mobilise community
+        members for collective action.</p>
+        <h3>What they hold</h3>
+        <p>The first thing is <strong>social legitimacy</strong>: the community's
+        fundamental belief that the chief has the right to govern. It is not given by law
+        and not granted by the government. It is held because the community believes it is
+        held. That matters enormously in health care, because community health programmes
+        succeed or fail on whether communities trust them. A programme endorsed by a
+        paramount chief walks into a community with trust already built. A programme that
+        bypasses the chief walks in as a stranger.</p>
+        <p>The second is <strong>enforcement capacity</strong>. If a paramount chief tells
+        a community that ProcCHW visits are a governance expectation — not optional, not a
+        programme activity, but a governance expectation — then households that would
+        otherwise close their doors to a female health worker begin to open them. The chief
+        does not need police and does not need legal authority. The chief has social
+        authority, which is more powerful in a remote chieftaincy than any government
+        mandate.</p>
+        <p>The third is <strong>embedded knowledge</strong>. A paramount chief knows their
+        chieftaincy the way no outsider can. They know which families are most vulnerable,
+        which households have pregnant women, which families cannot afford transport to the
+        health facility, which households trust each other and which community members
+        other people listen to. This knowledge is invisible to any DHMT planning meeting
+        and any district database. It lives in the chief.</p>
+        <h3>Why every programme ignored this</h3>
+        <p>Every health programme that came to Sierra Leone before iREACHE LASTMILE made
+        the same mistake. They consulted the chief. They held a community meeting. They
+        asked for the chief's blessing. And then they moved on and ran their programme
+        through government channels and NGO implementation structures, treating the chief
+        as a stakeholder who had been properly engaged.</p>
+        <p>They did not give the chief a governing role, formal decision-making authority
+        over the programme, or accountability for outcomes in their chieftaincy. They did
+        not connect the chief's social enforcement capacity to the health system in any
+        structural way. This is like having the most trusted person in the room and asking
+        them to stand in the corner while someone else runs the meeting. The REACH 360°
+        Framework does not make that mistake.</p>
+        <h2>System two: the Government Health System — clinical authority</h2>
+        <p>The Government Health System is what most people think of when they hear the
+        words <em>health system</em>: the Ministry of Health in Freetown, the District
+        Health Management Teams in district capitals, the Peripheral Health Units scattered
+        across chieftaincies, and the nurses, doctors, midwives, laboratory technicians and
+        health officers who work inside these structures. It was built with international
+        support over decades. It has policies, protocols, clinical standards and legal
+        authority over health resource allocation. It is the official health system of
+        Sierra Leone.</p>
+        <h3>What it holds</h3>
+        <p>The first thing is <strong>clinical authority</strong>. The government sets the
+        clinical standards that determine what counts as quality care. It certifies health
+        workers. It approves drug protocols. It operates the health facilities where
+        complicated cases go when they are beyond a community health worker's scope.
+        Without clinical authority, a community health programme is operating outside the
+        law.</p>
+        <p>The second is <strong>national resources</strong>. Only the government can put
+        ProcCHW salaries into a national budget line. Only the government can integrate CHW
+        data into the national health information system. Only the government can ensure
+        that community health systems survive donor cycles — because donors come and go,
+        but government budgets, in principle, continue. The path to a sustainable community
+        health system runs through government financing. There is no other path.</p>
+        <h3>The problem with this system</h3>
+        <p>The Government Health System has a structural weakness that no amount of
+        investment has ever fully solved. It is far away.</p>
+        <p>Not just geographically, although that is real: the nearest PHU serving a remote
+        Kenema chieftaincy may be fifteen kilometres away on a road that becomes impassable
+        in the rainy season, and that distance kills people. But the distance is also
+        institutional and social. A DHMT sits in a district town. Its planning meetings
+        happen in offices. Its data comes from facilities. Its understanding of what is
+        happening in a remote chieftaincy is limited to what gets reported through official
+        channels — which, in communities without a functioning community health worker, is
+        almost nothing. The Government Health System plans for populations it cannot fully
+        see and allocates resources to communities it cannot fully reach, because the most
+        marginalised communities are exactly the ones least represented in government data
+        systems.</p>
+        <p>This is not a failure of intent. It is a structural failure of distance. And you
+        cannot solve a distance problem by improving the performance of the institution
+        that is far away. You solve it by connecting that institution to the intelligence
+        that is close.</p>
+        <h2>System three: the Community Epidemiological System — post-Ebola intelligence</h2>
+        <p>This is the hardest system to see, because it was never formally named until the
+        REACH 360° Framework named it. It is not an organisation. It has no offices and no
+        staff. It appears in no government directory and no donor database. It is the
+        health knowledge that Sierra Leone's communities hold inside themselves —
+        specifically, and this is the part that makes it unique in the world, the health
+        knowledge that communities in Eastern Province built by surviving the 2014–2016
+        Ebola outbreak.</p>
+        <h3>What communities built, and how</h3>
+        <p>In 2014 Ebola entered Sierra Leone and spread fast. The formal health system was
+        overwhelmed almost immediately. In the communities most severely affected —
+        including communities in Kenema district, where iREACHE LASTMILE is headquartered
+        today — people were watching their neighbours and family members die, and the
+        formal response was not arriving fast enough to stop it. So communities did
+        something no health programme had planned for. They started protecting
+        themselves.</p>
+        <ol>
+          <li><strong>They started watching.</strong> People paid attention to specific
+          symptoms — fever, extreme weakness, vomiting, bleeding — noticed when a
+          neighbour showed these signs, and talked to each other about what they were
+          seeing. That is the beginning of community-based disease surveillance: the exact
+          function formal epidemiology systems perform, done by ordinary people with no
+          training, no equipment and no mandate.</li>
+          <li><strong>They built alert chains.</strong> One person tells the Section Chief.
+          The Section Chief tells the Paramount Chief. The Paramount Chief sends word to
+          the nearest health post or response team. These chains were never written down or
+          formalised into any protocol. They were improvised under pressure. But they moved
+          information from the community to the formal response faster than official
+          reporting channels, because they ran through trusted relationships rather than
+          bureaucratic processes.</li>
+          <li><strong>They developed isolation understanding.</strong> Communities learned
+          by watching the disease move that contact with a sick person was dangerous, and
+          developed their own approaches to separating sick people from healthy ones. Chiefs
+          enforced those approaches through social authority — which, in a remote
+          chieftaincy, moves faster and with less resistance than a government order that
+          takes days to arrive.</li>
+          <li><strong>They built trust-based reporting.</strong> Families were hiding sick
+          members because they were terrified of what reporting would mean, so official
+          channels were failing at exactly the moment they needed to work. Communities
+          developed what the formal system could not: trusted intermediaries — neighbours
+          and community leaders through whom sick households would communicate, and who
+          made the connection to the formal response feel less threatening.</li>
+          <li><strong>They built a collective memory.</strong> By the time Ebola ended in
+          2016, communities in Eastern Province had eighteen months of lived experience
+          with disease detection and community response. They knew what early symptoms
+          looked like, how fast the disease moved, which contact patterns were risky, and
+          how to mobilise community authority for health protection.</li>
+        </ol>
+        <h3>Why nobody recognised it</h3>
+        <p>After Ebola ended, health programmes returned to Eastern Province. They assessed
+        community health needs. They designed interventions. They trained community health
+        workers in disease surveillance protocols. But they did not ask communities what
+        they already knew. Nobody sat down with the survivors of Kenema's Ebola response
+        and asked how their detection system had worked, what could be learned from it, or
+        how it could be formalised so that it continues to function when the next health
+        threat arrives.</p>
+        <p>So the knowledge sat dormant: informally present in communities, officially
+        invisible to the health system. This is what the REACH 360° Framework calls the
+        Community Epidemiological System. It is not something iREACHE LASTMILE invented. It
+        is something Sierra Leone's communities built, at tremendous cost, and that no
+        health architecture had ever formally recognised and activated until now.</p>
+        <h2>How the ProcCHW connects all three systems at once</h2>
+        <p>Repositioning the community health worker from service delivery agent to systems
+        connector is the theoretical contribution that makes the REACH 360° Framework
+        original. The <a href="/our-model/procchw/">ProcCHW</a> is the human infrastructure
+        through which the three systems exchange intelligence, align authority, and govern
+        community health together. This is not an additional function layered on top of
+        service delivery. It is the primary function — from which service delivery
+        quality, sustainability and equity all derive.</p>
+        <p>She is selected by the traditional authority, so she carries social legitimacy
+        into every household she visits. She reports into the government health system, so
+        her data flows into national DHIS2, her referrals reach government facilities and
+        her work is co-owned by the DHMT. And she activates the community epidemiological
+        intelligence — through the CEIN, through the post-Ebola detection knowledge her
+        neighbours hold, through the alert networks communities built during Ebola and that
+        the Framework formalises as a standing component of Sierra Leone's national
+        surveillance system.</p>
+        <p>She is not just a health worker delivering services. She is a connection — made
+        human — between three systems that each hold something essential and that have
+        never, before the REACH 360° Framework, been designed to work together.</p>
+        <p>Connection is also what we measure. See
+        <a href="/reach-360/connection-quality-index/">the Connection Quality Index</a>.</p>
         """,
     ),
     (
@@ -710,61 +1013,121 @@ PAGES = [
         "who-we-are/founding-story",
         "Founding Story",
         "Who We Are",
-        "We did not found this organisation because we wanted to build an organisation.",
+        "Two encounters, one decision, and one name written on a piece of paper.",
         """
-        <blockquote>We did not found iREACHE LASTMILE because we wanted to build an
-        organisation. We founded it because we had seen what happens when the systems that
-        should protect communities are disconnected — and we could not continue to watch
-        it happen.</blockquote>
-        <h2>The place where we started</h2>
-        <p>Kenema. The word means 'clear water' in Mende — the language of Eastern
-        Province, the language of our founders, the language of the communities we serve.
-        It is a place of remarkable natural abundance and equally remarkable health
-        deprivation. In 2022 the district's maternal mortality rate exceeded Sierra Leone's
-        already high national average. In 2024 more than a fifth of children born in its
-        most remote chieftaincies received not a single vaccine in their first year.</p>
-        <p>Kenema also bore the heaviest concentration of Ebola transmission during the
-        2014–2016 outbreak. Communities in remote chieftaincies built their own detection
-        systems, their own isolation protocols and their own contact tracing networks,
-        because the formal health system could not reach them fast enough. They survived.
-        And in surviving they built something no health programme had ever recognised as a
-        health system asset: a community epidemiological intelligence infrastructure that
-        exists today in the collective memory and social organisation of Eastern Province
-        communities.</p>
-        <h2>The insight that founded the organisation</h2>
-        <p>Our founders had watched the same pattern repeat. Community health workers
-        recruited, trained, equipped and deployed. Outcomes improving for the duration of
-        the programme cycle. Then the grant ends, the equipment breaks and is not replaced,
-        the data systems are abandoned, and communities return to the situation that made
-        the programme necessary in the first place.</p>
-        <p>The standard diagnosis was that the CHWs were not well enough trained,
-        supervised or compensated. The standard solution was to improve all three. The
-        standard result was the same collapse at the end of the next cycle.</p>
-        <p>So they asked a different question: why does genuinely improved CHW performance
-        not produce sustainable health system improvement? The answer that changed
-        everything was that CHW performance is a symptom, not the cause. The cause is
-        <a href="/reach-360/three-systems/">systems disconnection</a>. A well-performing
-        CHW inside three disconnected systems produces better outputs during the programme
-        cycle and the same systemic failure when the programme ends.</p>
-        <h2>The name and what it means</h2>
-        <p><strong>Innovations</strong> — because the REACH 360° Framework is an original
-        Sierra Leonean contribution to the global community health field, not an adaptation
-        of a global model. <strong>Rural Empowerment</strong> — because empowerment is
-        built with communities, not done to them. <strong>Access</strong> — because the
-        problem is not quality of care in accessible facilities but access to care in
-        inaccessible communities. <strong>Community Health</strong> — because the
-        community as a social and governance unit is the level at which we work.
-        <strong>Equity</strong> — because equity is the spine of everything we do.</p>
-        <p><strong>LASTMILE</strong> is not a communications device. The last mile is the
-        segment where the route is hardest, the infrastructure most absent and the cost per
-        unit delivered highest — and where delivery matters most, because the communities
-        there carry the highest disease burden and have the least access to alternatives.
-        It is a programme commitment.</p>
-        <h2>The founding commitment</h2>
-        <p>We were founded on one commitment: that by 2031 Sierra Leone will
-        have a community health system — not a community health programme — that is
-        governed by communities, co-led by government, financed domestically and
-        continuously strengthened by the intelligence of its own evidence.</p>
+        <h2>The first encounter</h2>
+        <p>In June 2018, Augustine Alie was working as a community development officer in
+        Kenema district. His work took him across the district regularly — to chieftaincy
+        meetings, to community health consultations, to the planning meetings where DHMT
+        staff and NGO representatives sat together and discussed programme targets.</p>
+        <p>One morning he drove three hours on a dirt road to attend a community health
+        planning meeting in a remote chieftaincy. He arrived to find forty community
+        members waiting. They had been waiting since eight in the morning. It was now
+        eleven. The NGO representative had not come; the vehicle had broken down somewhere
+        between Kenema town and the chieftaincy, and nobody had sent word.</p>
+        <p>Augustine ran the meeting himself. He had not planned to. He did not have the
+        programme documents or the agenda. He sat down with the forty community members and
+        asked them the only question he could think of.</p>
+        <blockquote>Tell me what health care looks like in your community right now. Not
+        what you want. What is actually happening.</blockquote>
+        <p>They talked for three hours. What Augustine heard that morning — the specific
+        texture of community health failure in Eastern Sierra Leone, described not through
+        data but through lived experience — stayed with him for years. A grandmother
+        describing how her granddaughter had died of a fever because the community health
+        worker's medicine kit had been empty for six weeks. A young man describing the
+        chief's frustration at being asked to mobilise community members for a programme
+        that had collapsed three times in twelve years. A pregnant woman sitting quietly at
+        the back of the room who said only one thing when Augustine looked at her
+        directly.</p>
+        <blockquote>I am afraid of this pregnancy. Not because I am sick, because I don't
+        know if anyone will be there when it matters.</blockquote>
+        <p>Augustine drove back to Kenema that afternoon with forty testimonies in his
+        notebook and one question he could not answer: why does Sierra Leone keep building
+        the same programmes and getting the same results?</p>
+        <h2>The second encounter</h2>
+        <p>Eight months later, Augustine was visiting his grandmother in her village in the
+        Niawa chieftaincy of Kenema district. She was seventy-four years old. She had lived
+        through the civil war, through the Ebola outbreak, through more health programmes
+        than she could count. She was sharp and direct and completely unimpressed by
+        official explanations of anything.</p>
+        <p>On his second evening there, Augustine told her about the question he had been
+        carrying since the community meeting eight months earlier. She listened. She made
+        tea. She was quiet for a long time. Then she told him something he had not
+        known.</p>
+        <p>During the Ebola outbreak in 2014, when the formal health response was slow to
+        reach their chieftaincy, the community had organised itself. The paramount chief had
+        convened an emergency council. Women's group leaders had gone house to house asking
+        specific questions about symptoms. Section chiefs had set up alert chains. Trusted
+        community members had become the conduits through which sick households
+        communicated with the response teams — because families trusted their neighbours in
+        a way they did not yet trust the government teams arriving in unfamiliar protective
+        equipment. She described the network in specific detail: who had done what, how the
+        alerts had moved, which community decisions had contained transmission in which
+        neighbourhoods.</p>
+        <blockquote>We did these ourselves, before anyone came to help us. We already knew
+        how to protect each other. Nobody ever asked us about it afterward. Nobody wrote it
+        down. Nobody used it for anything. The next programme that came just started
+        training people as if we knew nothing.</blockquote>
+        <p>She looked at Augustine steadily. <em>The knowledge is still here</em>, she said,
+        <em>in this community. In every community that survived. Nobody has ever connected
+        it to anything.</em></p>
+        <p>Augustine sat with his grandmother until late that night. When he drove back to
+        Kenema the following morning, he had the answer to the question he had been carrying
+        for eight months.</p>
+        <p>Sierra Leone was not getting different results because it needed better
+        programmes. It was getting the same results because it was ignoring three systems
+        that were already present in every community — the traditional authority that held
+        social legitimacy, the government health architecture that held clinical authority,
+        and the community's own epidemiological intelligence that had been built through
+        survival and never activated.</p>
+        <p>He pulled over on the road between Niawa chieftaincy and Kenema town. He took
+        out his notebook and wrote four words at the top of a blank page.</p>
+        <blockquote>What if we connected them?</blockquote>
+        <p>Below those four words, he began writing what would eventually become the
+        <a href="/reach-360/">REACH 360° Community Health Systems Strengthening
+        Framework</a>.</p>
+        <h2>The name</h2>
+        <p>A week later, Augustine was in a small meeting room in Kenema with four
+        colleagues — a public health physician, a community development specialist, a
+        former DHMT officer, and a nurse who had worked in rural health posts for fifteen
+        years. He walked them through what he had been thinking. They talked for two
+        days.</p>
+        <p>On the second afternoon, they needed to name what they were building. The nurse
+        — a woman named Mariama Koroma, no relation to Augustine — wrote one sentence on
+        the whiteboard.</p>
+        <blockquote>We are building something for the people the system never reaches: the
+        last mile, the forgotten mile.</blockquote>
+        <p>Augustine looked at the sentence for a long time. Then he wrote five words
+        underneath it — <em>Innovations for Rural Empowerment — iREACHE</em> — and below
+        that, three more: <em>Last mile. Always.</em></p>
+        <p>The organisation was named in that room in Kenema on a Tuesday afternoon in
+        March 2019. Its headquarters have been in Kenema ever since. Not in Freetown. Not in
+        a district capital closer to the international airport or the donor offices or the
+        government ministries. In Kenema, where the grandmother's knowledge lives, where the
+        community meeting happened with forty people and no NGO representative. Where the
+        question was first asked and where the answer is being built.</p>
+        <h2>What we are building</h2>
+        <p>iREACHE LASTMILE exists because two encounters — a community meeting where forty
+        people described the texture of health failure in the most honest language Augustine
+        had ever heard, and an evening with an elderly woman who described a community
+        surveillance network that had saved lives and been forgotten — revealed something
+        that ten years of programme evaluations and district health reports had not.</p>
+        <p>Sierra Leone does not need another community health programme. Sierra Leone needs
+        a community health system: one that connects what already exists — the chief's
+        social authority, the government's clinical capacity, the community's
+        epidemiological intelligence — into a single governing architecture that is
+        community-owned, government-integrated and domestically financed.</p>
+        <p>One that, when asked Chief Fofanah's question — <em>when you go, what belongs to
+        us?</em> — can answer clearly. Everything. The governance belongs to the community.
+        The data belongs to the government. The knowledge belongs to the people who built it
+        by surviving Ebola. The financing belongs to Sierra Leone's own budget.</p>
+        <p>The only thing that leaves when iREACHE LASTMILE leaves is iREACHE LASTMILE. The
+        system stays. That is what we are building. That is why we exist.</p>
+        <h2>A vision written in Kenema</h2>
+        <blockquote>A Sierra Leone where every person — in every last-mile community,
+        regardless of distance or poverty — has equitable access to quality community health
+        care delivered by a workforce their own community governs and their own government
+        sustains.</blockquote>
         """,
     ),
     (
@@ -788,6 +1151,85 @@ PAGES = [
         moment requires not a programme but a system, and not an international organisation
         but a national institution that will still be here after every donor cycle
         ends.</p>
+        <h2>Phased systems activation</h2>
+        <blockquote>The most important implementation lesson in community health systems
+        building: deploy systems before ProcCHWs. Every ProcCHW deployed before governance
+        is established, supply chain is integrated and IDHS is validated is a ProcCHW
+        deployed into a service delivery role rather than a systems connector role.</blockquote>
+        <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Phase</th>
+              <th scope="col">Period</th>
+              <th scope="col">ProcCHWs</th>
+              <th scope="col">Human system milestones</th>
+              <th scope="col">IDHS milestones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1. Foundation</th>
+              <td>Jan–Jun 2026</td>
+              <td>0 — systems only</td>
+              <td>All legal registrations; Board constituted; core governance documents;
+              TACGS governance bodies in Kenema pilot chieftaincies; government platform
+              configured; equity baseline completed; MoH recognition secured; UNICEF–MCF
+              application submitted.</td>
+              <td>IDHS literacy integrated into the ProcCHW training curriculum. AI tool
+              design within DHIS2 architecture initiated. TRIAD AI Test documented and
+              Board-approved. IDHS Readiness Assessment completed. No AI applications
+              deployed.</td>
+            </tr>
+            <tr>
+              <th scope="row">2. Architecture</th>
+              <td>Jul–Dec 2026</td>
+              <td>0 — architecture only</td>
+              <td>TRIAD Governance Protocols and DHMT MoU signed in Kenema; CHCs
+              constituted; ProcCHW Supervisors trained; all 32 critical-path documents
+              produced; ProcCHW curriculum MoH-accredited; platform fully operational; CEIN
+              activation guide completed.</td>
+              <td>IDHS clinical decision support configured in DHIS2 as a program rule
+              extension; PBI anomaly detection rules written; AI alert feedback protocol
+              co-designed with ProcCHW input. No AI applications deployed.</td>
+            </tr>
+            <tr>
+              <th scope="row">3. Activation</th>
+              <td>Q1–Q2 2027</td>
+              <td>~250, Kenema</td>
+              <td>First Kenema ProcCHW cohort trained and deployed. First PBI payment on
+              the 1st of the month. First CQI assessment. Adaptive management before
+              expanding to other pilot chieftaincies.</td>
+              <td>IDHS iCCM decision support activated in Kenema. PBI anomaly detection
+              active. Basic stockout alerts active. Community feedback AI classification
+              active with CHC contestability. First AI Learning Brief published.</td>
+            </tr>
+            <tr>
+              <th scope="row">4. Scale</th>
+              <td>Q3 2027–2028</td>
+              <td>800–2,800</td>
+              <td>Scale to 4 pilot districts after Kenema CQI &gt; 60. The architecture
+              phase is replicated in each new district before any ProcCHW is deployed.
+              UNICEF–MCF programme fully activated.</td>
+              <td>Phase 2 IDHS tools activated after supply chain optimisation completes:
+              21-day demand forecasting; outbreak detection; zero-dose prediction;
+              personalised supervision. IDHS validated in Kenema before each new district
+              deployment.</td>
+            </tr>
+            <tr>
+              <th scope="row">5. Institutionalisation</th>
+              <td>2029–2031</td>
+              <td>6,800</td>
+              <td>All 16 districts; 70–80% domestic financing; MoH leads all operations;
+              iREACHE LASTMILE transitions to a technical assistance role in the earliest
+              districts; final evaluation published.</td>
+              <td>Phase 3 IDHS tools active: MUAC trajectory; financing simulation; Krio
+              NLP. Full IDHS government ownership transfer by 2031. The technical
+              assistance role includes IDHS model governance support for government.</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
         <h2>What has to be true by 2031</h2>
         <ul>
           <li>6,800 ProcCHWs deployed across all 16 districts, certified, compensated and
@@ -1084,37 +1526,76 @@ PAGES = [
         published open-access under Creative Commons CC BY 4.0. We invite critique,
         adaptation and replication, and we commit to publishing what we learn — including
         our failures.</p>
-        <h2>Six architectural levels</h2>
-        <ol>
-          <li><strong>Global and national foundation.</strong> The WHO Health System
-          Building Blocks, primary health care principles from Alma-Ata and Astana, the
-          UHC framework and the SDGs; alongside Sierra Leone's NHSSP, National CHW Policy,
-          Vision 2030 CHW Programme, Free Healthcare Initiative and IDSR framework.</li>
-          <li><strong>Theoretical architecture.</strong> The
-          <a href="/reach-360/three-systems/">Three-Systems Connection Theory</a>, the
-          <a href="/reach-360/foundations/">Four Constitutional Foundations</a>, equity as
-          structural spine, the Connection Quality Index, and
-          <a href="/reach-360/idhs/">Intelligent Digital Health Systems Integration</a> as
-          a horizontal dimension.</li>
-          <li><strong>The <a href="/what-we-do/">seven pillars</a>.</strong> Connected
-          Health Workforce; Community Intelligence and Surveillance System; Last-Mile
-          Supply Chain and Commodity Access; Sustainable Health Financing and Domestic
-          Resource Mobilisation; Three-Authority Community Governance and Accountability;
-          Proactive Community Health Service Delivery; and Driving Sustained Impact Through
-          Strategic Partnerships.</li>
-          <li><strong>The continuous systems cycle.</strong> Listen, map, co-create,
-          connect, deliver, measure, learn, strengthen, sustain, scale — a closed loop
-          that returns to listening at a higher level of system integration with each
-          completed turn.</li>
-          <li><strong>Nine programme areas.</strong> Maternal and newborn health; childhood
-          disease; immunisation and zero-dose reduction; nutrition systems; sexual and
-          reproductive health; community disease surveillance; intelligent digital health
-          systems; last-mile supply chain; and emergency response and WASH.</li>
-          <li><strong>Measurement architecture.</strong> Output impact through pillar KPIs,
-          outcome impact in health status, systems impact through the Connection Quality
-          Index, digital impact through the AI Readiness and Responsible Deployment Index,
-          and equity impact through the Equity Progress Threshold.</li>
-        </ol>
+        <h2>The framework architecture</h2>
+        <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Level</th>
+              <th scope="col">Name</th>
+              <th scope="col">Content</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1</th>
+              <td>Global and national foundation</td>
+              <td>WHO Health System Building Blocks (2007); primary health care from
+              Alma-Ata 1978 and Astana 2018; the UHC Framework; SDGs 1, 2, 3, 5, 10, 13 and
+              17; WHO AI Ethics 2021; Sierra Leone NHSSP; National CHW Policy 2024; Vision
+              2030 CHW Programme; Free Healthcare Initiative 2010; Sierra Leone IDSR
+              Framework; National eHealth and Digital Health Policy.</td>
+            </tr>
+            <tr>
+              <th scope="row">2</th>
+              <td>Theoretical architecture</td>
+              <td><a href="/who-we-are/our-approach/">Three-Systems Connection Theory</a> —
+              Sierra Leone's community health crisis is a systems disconnection problem;
+              the <a href="/reach-360/foundations/">Four Constitutional Foundations</a>
+              specific to Sierra Leone's governance reality; equity as the structural spine
+              of all seven pillars; the
+              <a href="/reach-360/connection-quality-index/">Connection Quality Index</a> as
+              the primary measurement architecture;
+              <a href="/reach-360/idhs/">Intelligent Digital Health Systems</a> integration
+              as a horizontal design dimension.</td>
+            </tr>
+            <tr>
+              <th scope="row">3</th>
+              <td>Seven REACH 360° pillars</td>
+              <td><a href="/what-we-do/">Connected Health Workforce</a> | Community
+              Intelligence and Surveillance System | Last-Mile Supply Chain and Commodity
+              Access | Sustainable Health Financing and Domestic Resource Mobilisation |
+              Three-Authority Community Governance and Accountability | Proactive Community
+              Health Service Delivery | Driving Sustained Impact Through Strategic
+              Partnerships.</td>
+            </tr>
+            <tr>
+              <th scope="row">4</th>
+              <td>Continuous systems cycle</td>
+              <td>Listen → Map → Co-create → Connect → Deliver → Measure → Learn →
+              Strengthen → Sustain → Scale — a closed loop returning to Listen at a higher
+              level of system integration with each completed cycle.</td>
+            </tr>
+            <tr>
+              <th scope="row">5</th>
+              <td>Nine programme areas</td>
+              <td>Maternal and newborn health | Childhood disease (iCCM) | Immunisation and
+              zero-dose reduction | Nutrition systems | Sexual and reproductive health |
+              Community disease surveillance | Intelligent digital health systems |
+              Last-mile health supply chain | Emergency response and WASH.</td>
+            </tr>
+            <tr>
+              <th scope="row">6</th>
+              <td>Measurement architecture</td>
+              <td>Output impact (pillar KPIs) → Outcome impact (health status) → Systems
+              impact (Connection Quality Index) → IDHS impact (AI Readiness and Responsible
+              Deployment Index) → Equity impact (Equity Progress Threshold) → stronger
+              community health systems, better outcomes, government capacity, health equity
+              and universal health coverage.</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
         <h2>Equity as the spine</h2>
         <p>Equity is not a cross-cutting theme in this Framework. It is the structural logic
         that determines why each pillar is designed the way it is. The reason the Framework
@@ -1314,6 +1795,125 @@ PAGES = [
         """,
     ),
     (
+        "reach-360/connection-quality-index",
+        "The Connection Quality Index",
+        "REACH 360°",
+        "Not what the programme produced, but what changed in the governance systems "
+        "around it because of its presence.",
+        """
+        <blockquote>The CQI measures what the REACH 360° Framework most cares about — not
+        what the programme produced, but what changed in the governance systems around the
+        programme because of its presence.</blockquote>
+        <h2>Why standard metrics are insufficient</h2>
+        <p>Standard programme monitoring measures outputs. The CQI measures systems
+        connection: whether the three governance systems are genuinely exchanging
+        intelligence, aligning authority and governing community health together. A
+        programme with high output metrics and a CQI score below 40 is a service delivery
+        programme that will collapse when funding ends. A rising CQI score signals a system
+        being built that will outlast the grant cycle.</p>
+        <p><a href="/reach-360/idhs/">Intelligent Digital Health Systems</a> support CQI
+        measurement by automating data collection and aggregation, freeing assessors to
+        focus on the qualitative dimensions that require human judgment — which no AI can
+        generate from platform data alone.</p>
+        <h2>The three dimensions</h2>
+        <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Dimension</th>
+              <th scope="col">Indicators (four per dimension)</th>
+              <th scope="col">Year 3</th>
+              <th scope="col">Year 5</th>
+              <th scope="col">IDHS support</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">1. Traditional authority governance integration</th>
+              <td>Percentage of chiefs describing chiefdom health indicators without
+              prompting; TA governance decisions with measurable programme consequences;
+              stockout events escalated through traditional governance; ProcCHW selection
+              legitimacy through the TA process.</td>
+              <td>&gt; 70%</td>
+              <td>&gt; 90%</td>
+              <td>TACGS governance event log analysis; automated scoring of TA Health
+              Governance Council meeting records.</td>
+            </tr>
+            <tr>
+              <th scope="row">2. Government–community intelligence flow</th>
+              <td>Percentage of DHMT decisions citing community data; CEIN
+              detection-to-DHMT time; percentage of community members able to state one
+              health statistic; percentage of dashboard alerts generating DHMT corrective
+              action.</td>
+              <td>&gt; 50%</td>
+              <td>&gt; 75%</td>
+              <td>DHMT dashboard access log analysis; CEIN alert timestamp tracking;
+              automated CQI data extraction from DHIS2.</td>
+            </tr>
+            <tr>
+              <th scope="row">3. Community health system navigation capacity</th>
+              <td>Percentage of referrals completed without a ProcCHW escort; time
+              reduction from danger sign to facility; percentage of maternal deaths
+              reported through community channels; percentage of CHC decisions made without
+              District Coordinator facilitation.</td>
+              <td>&gt; 55%</td>
+              <td>&gt; 70%</td>
+              <td>Referral completion tracking; transport barrier pattern analysis; CHC
+              governance independence scoring from meeting records.</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+        <h2>Reading the score</h2>
+        <div class="table-wrap">
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Score</th>
+              <th scope="col">Interpretation</th>
+              <th scope="col">What it means</th>
+              <th scope="col">Required action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <th scope="row">80–100</th>
+              <td>Systems deeply connected</td>
+              <td>REACH 360° fully working — the systems will sustain without iREACHE
+              LASTMILE's direct presence.</td>
+              <td>Maintain; document as a model district; begin the transition to a
+              technical assistance role; initiate IDHS government ownership transfer.</td>
+            </tr>
+            <tr>
+              <th scope="row">60–79</th>
+              <td>Substantially connected, with specific gaps</td>
+              <td>The framework is working but one dimension is lagging, and targeted
+              intervention is required.</td>
+              <td>Targeted intervention in the weak dimension; additional District
+              Coordinator support; IDHS tool review for that dimension.</td>
+            </tr>
+            <tr>
+              <th scope="row">40–59</th>
+              <td>Partially connected</td>
+              <td>Outputs without connections — the service delivery trap.</td>
+              <td>Programme design review; TACGS renegotiation; IDHS deployment suspended
+              in weak dimensions until the human systems are established.</td>
+            </tr>
+            <tr>
+              <th scope="row">Below 40</th>
+              <td>Insufficiently connected</td>
+              <td>Structural programme failure — service delivery without systems
+              building.</td>
+              <td>District pause; root cause analysis; Crosswalk divergence alert; all IDHS
+              applications suspended until the human systems are established; Board-level
+              reporting.</td>
+            </tr>
+          </tbody>
+        </table>
+        </div>
+        """,
+    ),
+    (
         "research",
         "Research",
         "Research",
@@ -1470,7 +2070,7 @@ class Command(BaseCommand):
     def seed_settings(self):
         settings_obj = SiteSettings.load()
         for field, (superseded, current) in SUPERSEDED_SETTINGS.items():
-            if getattr(settings_obj, field) in ("", superseded):
+            if getattr(settings_obj, field) in ("",) + superseded:
                 setattr(settings_obj, field, current)
         settings_obj.linkedin = settings_obj.linkedin or "https://www.linkedin.com/"
         settings_obj.facebook = settings_obj.facebook or "https://www.facebook.com/"
@@ -1537,11 +2137,33 @@ class Command(BaseCommand):
         self.stdout.write("  locations")
 
     def seed_stats(self):
+        """Write both stat groups.
+
+        A figure is keyed on its value *and* its group: 6,800 appears in the
+        hero and again in the band, with different wording in each, so the value
+        alone no longer identifies a row. Rows in a group that the document no
+        longer lists are deleted, which is how the band was cut from three long
+        sentences to five short ones.
+        """
         Stat.objects.filter(value__in=LEGACY_STAT_VALUES).delete()
-        for index, (value, label) in enumerate(STATS):
+        for index, (value, label, caption) in enumerate(HERO_STATS):
             Stat.objects.update_or_create(
-                value=value, defaults={"label": label, "order": index}
+                value=value,
+                group=Stat.HERO,
+                defaults={"label": label, "caption": caption, "order": index},
             )
+        for index, (value, label) in enumerate(BAND_STATS):
+            Stat.objects.update_or_create(
+                value=value,
+                group=Stat.BAND,
+                defaults={"label": label, "caption": "", "order": index},
+            )
+        Stat.objects.filter(group=Stat.HERO).exclude(
+            value__in=[value for value, _, _ in HERO_STATS]
+        ).delete()
+        Stat.objects.filter(group=Stat.BAND).exclude(
+            value__in=[value for value, _ in BAND_STATS]
+        ).delete()
         self.stdout.write("  stats")
 
     def seed_pages(self):

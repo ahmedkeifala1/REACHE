@@ -44,3 +44,6 @@ Thumbs.db
 # Local secrets. .env* also covers the .env.local the Vercel CLI writes.
 .env
 .env*
+
+# Word keeps a lock file beside any open document.
+~$*

@@ -75,18 +75,27 @@ class SiteSettings(models.Model):
         max_length=255,
         default="Innovations for Rural Empowerment in Access to Community Health and Equity",
     )
-    hero_prefix = models.CharField(max_length=120, default="iREACHE LASTMILE transforms")
+    hero_eyebrow = models.CharField(
+        max_length=160,
+        blank=True,
+        default="Sierra Leone · Eastern Province · 2026",
+        help_text="Small line printed above the hero headline.",
+    )
+    hero_prefix = models.CharField(max_length=120, default="Building the health system")
     hero_headline = models.CharField(
-        max_length=255, default="health care delivery to reach"
+        max_length=255, default="Sierra Leone's communities"
     )
     hero_rotating_words = models.CharField(
         max_length=255,
-        default="everyone,every mother,every newborn,every village",
-        help_text="Comma separated words cycled in the hero headline.",
+        default="have always deserved.",
+        help_text="Closing line of the hero headline. Several comma separated "
+        "phrases are cycled; a single one stays put.",
     )
     hero_body = models.TextField(
-        default="iREACHE LASTMILE designs responsive primary health care systems so that "
-        "life-saving products and services reach the communities hardest to reach."
+        default="iREACHE LASTMILE connects three systems that have never governed "
+        "community health together — traditional authority, government, and "
+        "community intelligence — through 6,800 ProcCHWs reaching every "
+        "last-mile household every month."
     )
     hero_image = models.ImageField(
         upload_to="site/",
@@ -334,10 +343,28 @@ class Location(TimeStamped):
 
 
 class Stat(TimeStamped):
-    """Impact counters."""
+    """Impact counters.
+
+    ``group`` decides where a figure is printed. The ``hero`` figures are the
+    four cards under the home page headline, each carrying a sentence and a
+    short qualifier; the ``band`` figures are the compact row that runs across
+    the angled green strip further down the page and across the donate page.
+    The same number appears in both groups with different wording, which is why
+    a figure is identified by its value *and* its group rather than value alone.
+    """
+
+    HERO = "hero"
+    BAND = "band"
+    GROUP_CHOICES = [(HERO, "Home page hero"), (BAND, "Impact band")]
 
     value = models.CharField(max_length=40, help_text="e.g. 155,000,000")
     label = models.TextField(help_text="Sentence describing the figure.")
+    caption = models.CharField(
+        max_length=120,
+        blank=True,
+        help_text="Short qualifier under a hero figure, e.g. 'Target < 300'.",
+    )
+    group = models.CharField(max_length=8, choices=GROUP_CHOICES, default=BAND)
     order = models.PositiveIntegerField(default=0)
 
     class Meta:

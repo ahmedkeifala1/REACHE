@@ -96,6 +96,13 @@
 
   function countUp(el) {
     var raw = el.textContent.trim();
+
+    /* Only a figure that is one run of digits, optionally wrapped in symbols,
+       can be counted up: "6,800" and "$1" animate, but "4.5M", "354→300"
+       and "70–80%" have two runs and would be rebuilt as nonsense, so they
+       are left as the editor typed them. */
+    if (!/^[^0-9]*[0-9][0-9,]*[^0-9]*$/.test(raw)) return;
+
     var digits = raw.replace(/[^0-9]/g, "");
     if (!digits) return;
 

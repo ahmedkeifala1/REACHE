@@ -14,6 +14,9 @@
   --green-light: #0a7043;
   --rust: #b8512b;
   --rust-dark: #94401f;
+  /* The same logo rust lifted in lightness, for accent text on the deep green
+     ground, where #b8512b itself is too close to the background to read. */
+  --rust-light: #dd7440;
 
   /* Neutrals / earth tones carried over from the reference layout */
   --slate: #424f57;
@@ -448,10 +451,10 @@ img {
    and bottom of the hero, so the whole angle is tuned from these two values. */
 
 .hero {
-  --wedge-top: 46%;
-  --wedge-bottom: 22%;
+  --wedge-top: 62%;
+  --wedge-bottom: 34%;
   position: relative;
-  min-height: 92vh;
+  min-height: 88vh;
   display: flex;
   align-items: center;
   background: var(--green-dark);
@@ -496,7 +499,10 @@ img {
 .hero__inner {
   position: relative;
   z-index: 2;
-  padding: calc(var(--header-h) + 70px) 0 40px;
+  padding: calc(var(--header-h) + 62px) 0 50px;
+}
+.hero__eyebrow,
+.hero__title {
   max-width: 940px;
 }
 .hero__title {
@@ -512,14 +518,97 @@ img {
   display: block;
   font-weight: 400;
 }
-/* The closing word is the hero's focal point: much larger and much heavier. */
+/* The closing line is set much larger and much heavier than the lines above. */
 .hero__rotator {
   display: block;
   font-weight: 800;
-  font-size: 1.62em;
+  font-size: 1.5em;
   line-height: 1.02;
-  margin-top: 0.04em;
+  margin-top: 0.06em;
   letter-spacing: -0.02em;
+}
+
+/* The closing line is the hero's focal point: much larger, much heavier, and
+   lifted into the rust accent so it reads as the sentence's landing. */
+.hero__rotator {
+  color: var(--rust-light);
+}
+
+/* Place / province / year, set small and wide above the headline. */
+.hero__eyebrow {
+  color: var(--sand-deep);
+  font-family: var(--head-font);
+  font-weight: 700;
+  font-size: 0.82rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  margin: 0 0 20px;
+}
+
+.hero__body {
+  color: rgba(255, 255, 255, 0.92);
+  font-size: clamp(1rem, 1.35vw, 1.12rem);
+  max-width: 640px;
+  margin: 26px 0 0;
+  text-shadow: 0 2px 18px rgba(0, 0, 0, 0.35);
+}
+
+.hero__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  margin-top: 30px;
+}
+/* The third action is a quieter outline than the second, so the three read as
+   primary, secondary and tertiary rather than as three equal choices. */
+.btn--quiet {
+  border-color: rgba(255, 255, 255, 0.4);
+  color: rgba(255, 255, 255, 0.85);
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------- hero stats */
+
+/* The four framing figures sit inside the hero, below the actions. Each card
+   carries its own dark ground because the row runs off the wedge and onto the
+   photograph, where white text alone would not hold. */
+.hero__stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 18px;
+  margin-top: 52px;
+  max-width: 1060px;
+}
+.hero-stat {
+  padding: 20px 20px 18px;
+  border-radius: var(--radius);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-top: 3px solid var(--rust);
+  background: rgba(1, 40, 23, 0.62);
+  backdrop-filter: blur(3px);
+}
+.hero-stat__value {
+  font-family: var(--head-font);
+  font-size: clamp(1.9rem, 3vw, 2.6rem);
+  font-weight: 800;
+  line-height: 1;
+  color: var(--white);
+  margin-bottom: 10px;
+}
+.hero-stat__label {
+  color: rgba(255, 255, 255, 0.88);
+  font-size: 0.86rem;
+  line-height: 1.45;
+  margin: 0;
+}
+.hero-stat__caption {
+  margin: 8px 0 0;
+  font-family: var(--head-font);
+  font-weight: 700;
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--sand-deep);
 }
 
 /* ----------------------------------------------------- lead feature card */
@@ -728,6 +817,20 @@ img {
   font-size: 0.98rem;
   margin: 0 auto;
   max-width: 300px;
+}
+/* Five short figures rather than three sentences: narrower columns, and the
+   label set as a caption under the number rather than as a line of prose. */
+.stats__grid--compact {
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 28px 20px;
+}
+.stats__grid--compact .stat__label {
+  font-family: var(--head-font);
+  font-weight: 600;
+  font-size: 0.85rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.82);
 }
 
 /* Slanted top and bottom edges, so the green band reads as a strip cut across
@@ -1059,6 +1162,46 @@ img {
   font-size: 1.15rem;
   font-style: italic;
   color: var(--green-dark);
+}
+
+/* Several pages carry the source document's tables. The wrapper scrolls rather
+   than letting a five-column table push the page sideways on a phone. */
+.table-wrap {
+  overflow-x: auto;
+  margin: 1.8em 0;
+  border: 1px solid var(--stone);
+  border-radius: var(--radius);
+}
+.prose table {
+  width: 100%;
+  min-width: 560px;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+.prose thead th {
+  background: var(--green);
+  color: var(--white);
+  font-family: var(--head-font);
+  letter-spacing: 0.04em;
+}
+.prose th,
+.prose td {
+  text-align: left;
+  vertical-align: top;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--stone);
+}
+.prose tbody tr:last-child th,
+.prose tbody tr:last-child td {
+  border-bottom: 0;
+}
+.prose tbody tr:nth-child(even) {
+  background: var(--cream);
+}
+.prose tbody th {
+  color: var(--green-dark);
+  font-family: var(--head-font);
+  white-space: nowrap;
 }
 
 /* ------------------------------------------------------------ misc pieces */
@@ -1506,6 +1649,12 @@ img {
     min-height: auto;
     padding-bottom: 90px;
   }
+  /* Two figures a row rather than four, and the whole hero left-aligned over a
+     wedge that now covers most of the width. */
+  .hero__stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin-top: 40px;
+  }
   /* The card stacks, so the angled inner edge has nothing to cut against. */
   .lead-feature {
     grid-template-columns: 1fr;
@@ -1556,6 +1705,16 @@ img {
   .hero {
     --wedge-top: 96%;
     --wedge-bottom: 82%;
+  }
+  .hero__stats {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+  .hero__actions .btn {
+    flex: 1 1 100%;
+  }
+  .prose table {
+    min-width: 460px;
   }
   .lead-feature__body {
     padding: 28px 22px;

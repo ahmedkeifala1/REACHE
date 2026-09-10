@@ -129,6 +129,7 @@ class FrameworkContentTests(TestCase):
         "reach-360/three-systems",
         "reach-360/foundations",
         "reach-360/idhs",
+        "reach-360/connection-quality-index",
     ]
 
     @classmethod
@@ -210,6 +211,102 @@ class FrameworkContentTests(TestCase):
         call_command("seed_content", verbosity=0)
         self.assertFalse(Stat.objects.filter(value="2,400,000").exists())
         self.assertTrue(Stat.objects.filter(value="6,800").exists())
+
+
+class WebsiteDocumentTests(TestCase):
+    """The home page and Who We Are section follow the REACH 360 website document.
+
+    That document supersedes the Master Document on the wording a visitor reads
+    first: the hero headline, the four framing figures beneath it, the origin
+    narrative, and the tables the framework, phasing and CQI pages are built
+    from.
+    """
+
+    @classmethod
+    def setUpTestData(cls):
+        call_command("seed_content", verbosity=0)
+
+    def test_hero_carries_the_documents_headline(self):
+        response = self.client.get("/")
+        self.assertContains(response, "Sierra Leone \u00b7 Eastern Province \u00b7 2026")
+        self.assertContains(response, "Building the health system")
+        self.assertContains(response, escape("Sierra Leone's communities"))
+        self.assertContains(response, "have always deserved.")
+        self.assertContains(response, "connects three systems that have never governed")
+
+    def test_hero_actions_reach_the_pages_they_name(self):
+        for path in ("/our-model/", "/who-we-are/founding-story/", "/our-impact/"):
+            with self.subTest(path=path):
+                self.assertEqual(self.client.get(path).status_code, 200)
+
+    def test_the_four_framing_figures_are_on_the_home_page(self):
+        response = self.client.get("/")
+        for value, caption in (
+            ("6,800", "All districts"),
+            ("4.5M", "By 2031"),
+            ("354", "Target &lt; 300"),
+            ("$1", "Why we exist"),
+        ):
+            with self.subTest(value=value):
+                self.assertContains(response, value)
+                self.assertContains(response, caption)
+
+    def test_the_two_stat_groups_are_kept_apart(self):
+        """6,800 is in both groups, with the band's shorter wording of it."""
+        self.assertEqual(Stat.objects.filter(group=Stat.HERO).count(), 4)
+        self.assertEqual(Stat.objects.filter(group=Stat.BAND).count(), 5)
+        band = Stat.objects.get(group=Stat.BAND, value="6,800")
+        self.assertEqual(band.label, "ProcCHWs by 2031")
+        self.assertEqual(band.caption, "")
+
+    def test_the_superseded_financing_figure_is_removed(self):
+        Stat.objects.create(value="70\u201380%", label="Superseded", group=Stat.BAND)
+        call_command("seed_content", verbosity=0)
+        self.assertFalse(Stat.objects.filter(value="70\u201380%").exists())
+
+    def test_founding_story_is_the_origin_narrative(self):
+        response = self.client.get("/who-we-are/founding-story/")
+        self.assertContains(response, "Augustine Alie")
+        self.assertContains(response, "Niawa")
+        self.assertContains(response, "March 2019")
+        self.assertContains(response, "What if we connected them?")
+
+    def test_our_approach_walks_all_three_systems(self):
+        response = self.client.get("/who-we-are/our-approach/")
+        for system in (
+            "Traditional Authority System",
+            "Government Health System",
+            "Community Epidemiological System",
+        ):
+            with self.subTest(system=system):
+                self.assertContains(response, system)
+
+    def test_the_documents_tables_are_rendered_as_tables(self):
+        for path, tables in (
+            ("who-we-are/mission-vision-values", 1),
+            ("who-we-are/strategy-2030", 1),
+            ("reach-360", 1),
+            ("reach-360/connection-quality-index", 2),
+        ):
+            with self.subTest(path=path):
+                body = self.client.get("/{0}/".format(path)).content.decode()
+                self.assertEqual(body.count("<table>"), tables)
+                self.assertEqual(body.count('class="table-wrap"'), tables)
+
+    def test_eight_values_are_described_in_practice(self):
+        response = self.client.get("/who-we-are/mission-vision-values/")
+        for value in (
+            "Equity",
+            "Excellence",
+            "Accountability",
+            "Co-ownership",
+            "Government primacy",
+            "Evidence",
+            "Human primacy in digital health",
+            "Dignity",
+        ):
+            with self.subTest(value=value):
+                self.assertContains(response, "<th scope=\"row\">{0}</th>".format(value))
 
 
 class SearchTests(TestCase):

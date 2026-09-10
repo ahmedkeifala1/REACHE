@@ -28,7 +28,8 @@ def home(request):
     context = {
         "featured_posts": posts.filter(is_featured=True)[:5],
         "focus_areas": FocusArea.objects.all(),
-        "stats": Stat.objects.all(),
+        "hero_stats": Stat.objects.filter(group=Stat.HERO),
+        "stats": Stat.objects.filter(group=Stat.BAND),
         "locations": Location.objects.all()[:6],
         "posts": posts[:6],
         "programs": Program.objects.all()[:6],
@@ -189,7 +190,7 @@ def donate(request):
         request,
         "pages/donate.html",
         {
-            "stats": Stat.objects.all(),
+            "stats": Stat.objects.filter(group=Stat.BAND),
             "hero": section_pages.hero("get-involved/donate", request.user),
         },
     )
